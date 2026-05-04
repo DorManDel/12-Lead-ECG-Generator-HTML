@@ -1,0 +1,617 @@
+/* ============================================================
+   ECG 12 LEAD GENERATOR - STYLE.CSS
+============================================================ */
+
+
+/* #region 00 - Theme Variables */
+
+:root {
+  --bg: #eef0f4;
+  --card: #ffffff;
+  --card-glass: rgba(255, 255, 255, 0.82);
+  --card-border: #dce1ea;
+  --text: #151922;
+  --muted: #667085;
+
+  --input-bg: #ffffff;
+  --input-border: #dce1ea;
+
+  --button-bg: #f5f7fb;
+  --button-hover: #e9edf5;
+
+  --paper-frame: #ffffff;
+  --ecg-scale: 0.88;
+
+  --accent: #14b8c4;
+  --danger-bg: #ffe1e1;
+  --danger-text: #a01818;
+}
+
+body.dark-mode {
+  --bg: #10151e;
+  --card: #171d28;
+  --card-glass: rgba(23, 29, 40, 0.82);
+  --card-border: #2b3444;
+  --text: #f4f7fb;
+  --muted: #b8c2d2;
+
+  --input-bg: #111720;
+  --input-border: #2b3444;
+
+  --button-bg: #1f2937;
+  --button-hover: #2b3748;
+
+  --paper-frame: #171d28;
+
+  --danger-bg: #3a1f24;
+  --danger-text: #ffb4b4;
+}
+
+/* #endregion */
+
+
+/* #region 01 - Base */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: auto;
+  font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+
+  background: var(--button-bg);
+  color: var(--text);
+
+  font-weight: 800;
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+button:hover {
+  background: var(--button-hover);
+  transform: translateY(-1px);
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 10px;
+
+  color: var(--text);
+  background: var(--input-bg);
+
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: #5b8cff;
+  box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.18);
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-height: auto;
+  accent-color: var(--accent);
+}
+
+/* #endregion */
+
+
+/* #region 02 - Header / Navbar */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  width: 100%;
+  padding: 12px 16px;
+
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid var(--card-border);
+}
+
+.app-header-inner {
+  width: min(100%, 1720px);
+  margin-inline: auto;
+
+  display: grid;
+  grid-template-columns: 180px 1fr 180px;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-side {
+  display: flex;
+  align-items: center;
+}
+
+.header-left {
+  justify-content: flex-start;
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+.brand-block {
+  direction: ltr;
+  text-align: center;
+  min-width: 0;
+}
+
+.brand-block h1 {
+  margin: 0;
+
+  font-size: clamp(1.25rem, 2vw, 2.1rem);
+  line-height: 1.05;
+  font-weight: 800;
+
+  overflow-wrap: anywhere;
+}
+
+.brand-block p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.header-btn {
+  min-width: 120px;
+  min-height: 42px;
+  padding-inline: 18px;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+.settings-mini-btn {
+  min-width: 52px;
+  width: 52px;
+  padding-inline: 0;
+  border-radius: 16px;
+  font-size: 1.25rem;
+}
+
+/* #endregion */
+
+
+/* #region 03 - Main Layout */
+
+.page-center {
+  width: 100%;
+  min-height: calc(100dvh - 82px);
+  padding: 12px 16px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.app-wrapper {
+  width: min(100%, 1720px);
+
+  display: grid;
+  grid-template-rows: auto minmax(600px, 1fr);
+  gap: 12px;
+}
+
+.controls-card,
+.paper-shell {
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.controls-card {
+  padding: 12px 14px;
+}
+
+.control-area {
+  width: 100%;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(120px, 0.45fr)
+    minmax(210px, 1fr)
+    minmax(180px, 0.8fr)
+    minmax(90px, 0.35fr)
+    minmax(220px, 0.85fr);
+
+  gap: 12px;
+  align-items: end;
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.field span {
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.field-wide {
+  min-width: 0;
+}
+
+.checkbox-field {
+  justify-items: center;
+}
+
+.compact-slider {
+  max-width: none;
+}
+
+.hr-range-hint {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* #endregion */
+
+
+/* #region 04 - Advanced ECG Controls */
+
+.advanced-ecg-panel {
+  margin-top: 10px;
+  border-top: 1px solid var(--card-border);
+  padding-top: 10px;
+}
+
+.advanced-ecg-panel summary {
+  cursor: pointer;
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+  user-select: none;
+}
+
+.advanced-grid {
+  margin-top: 14px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 10px;
+}
+
+.advanced-grid .field {
+  padding: 9px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 88%, #ffffff 4%);
+}
+
+.advanced-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.secondary-btn {
+  min-height: 36px;
+  padding-inline: 14px;
+  font-size: 0.9rem;
+}
+
+/* #endregion */
+
+
+/* #region 05 - ECG Paper */
+
+.paper-shell {
+  min-height: 0;
+  padding: 18px;
+  overflow: auto;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  background: var(--paper-frame);
+}
+
+.ecg-center-wrapper {
+  width: max-content;
+  min-width: 100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  display: block;
+
+  width: calc(1600px * var(--ecg-scale));
+  max-width: none;
+  height: auto;
+
+  aspect-ratio: 16 / 10;
+  background: #fffafa;
+  border: 1px solid #d8caca;
+}
+
+/* #endregion */
+
+
+/* #region 06 - Settings Side Drawer */
+
+.hidden {
+  display: none !important;
+}
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  padding: 0;
+}
+
+.settings-modal {
+  width: min(380px, 92vw);
+  height: 100dvh;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+
+  background: var(--card-glass);
+  color: var(--text);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border-left: 1px solid color-mix(in srgb, var(--card-border) 70%, transparent);
+  box-shadow: -18px 0 55px rgba(0, 0, 0, 0.28);
+
+  overflow: hidden;
+
+  animation: drawerSettleFromLeft 0.18s ease-out;
+}
+
+/*
+  Drawer stays on the RIGHT,
+  but starts slightly from the left and settles rightward.
+*/
+@keyframes drawerSettleFromLeft {
+  from {
+    transform: translateX(-24px);
+    opacity: 0.65;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawerOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-24px);
+    opacity: 0;
+  }
+}
+
+.settings-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.settings-header h2 {
+  margin: 0;
+  width: 100%;
+
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.settings-header .icon-btn {
+  position: absolute;
+  right: 14px;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 12px;
+  font-size: 1.35rem;
+}
+
+.settings-body {
+  overflow-y: auto;
+
+  display: grid;
+  align-content: start;
+  gap: 20px;
+
+  padding: 18px 16px;
+}
+
+.settings-row,
+.settings-slider {
+  display: grid;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.settings-row {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.settings-footer {
+  display: grid;
+  gap: 10px;
+
+  padding: 16px;
+  border-top: 1px solid var(--card-border);
+}
+
+.settings-footer button {
+  min-height: 42px;
+  padding: 12px 16px;
+}
+
+.danger-btn {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.settings-note {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* #endregion */
+
+
+/* #region 07 - Responsive */
+
+@media (max-width: 900px) {
+  .app-header-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .header-side {
+    justify-content: center;
+  }
+
+  .brand-block {
+    text-align: center;
+  }
+
+  .page-center {
+    display: block;
+    padding: 10px;
+  }
+
+  .app-wrapper {
+    grid-template-rows: auto auto;
+  }
+
+  .control-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .paper-shell {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-modal {
+    width: min(390px, 94vw);
+  }
+}
+
+/* #endregion */
+
+
+/* #region 08 - Print */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .app-header,
+  .controls-card,
+  .settings-overlay {
+    display: none !important;
+  }
+
+  .page-center,
+  .app-wrapper {
+    display: block;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .paper-shell {
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  canvas {
+    width: 100%;
+    border: none;
+  }
+}
+
+/* #endregion */
