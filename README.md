@@ -11,7 +11,7 @@
 ### Click the logo to open the live demo ⬆️
 
   ---
-  
+
   **Educational 12-lead ECG simulator built with HTML, CSS, and JavaScript.**
 
   <br />
@@ -43,9 +43,13 @@
 ## Demo Video
 
 <p align="center">
-  <a href="docs/demo.mp4">
+  <a href="assets/demo.mp4">
     <img src="assets/demo-thumbnail.png" alt="Watch ECG Generator demo" width="800" />
   </a>
+</p>
+
+<p align="center">
+  <sub>Click the preview image to open the demo video.</sub>
 </p>
 
 <p align="center">
@@ -176,9 +180,7 @@ flowchart TD
 │   ├── readme-hero.png
 │   ├── readme-dark.png
 │   ├── readme-controls.png
-│   └── demo-thumbnail.png
-│
-├── docs/
+│   ├── demo-thumbnail.png
 │   └── demo.mp4
 │
 ├── data/
