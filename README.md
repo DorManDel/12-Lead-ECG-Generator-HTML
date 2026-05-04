@@ -1,6 +1,12 @@
 <div align="center">
 
-  <img src="assets/icon-try.png" alt="ECG Generator Logo" width="96" />
+  <a href="https://dormandel.github.io/12-Lead-ECG-Generator-HTML/" target="_blank">
+  <img src="assets/icon-try.png" alt="ECG Generator Logo - Click to open live demo" width="96" />
+</a>
+
+<br />
+
+### Click the logo to open the live demo ⬆️
 
   # ECG 12 Lead Generator
 
@@ -23,13 +29,6 @@
 
 ---
 
-## Live Demo
-
-Open the project here:
-
-**https://dormandel.github.io/12-Lead-ECG-Generator-HTML/**
-
----
 
 ## Preview
 
