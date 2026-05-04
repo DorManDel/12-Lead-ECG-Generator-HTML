@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ECG 12 Lead Generator</title>
+  <meta name="description"
+    content="Educational ECG 12-lead simulator with rhythm profiles, page settings, and print layout." />
+
+  <!-- Preview / Open Graph -->
+  <meta property="og:title" content="ECG 12 Lead Generator" />
+  <meta property="og:description" content="Educational ECG simulator for 12-lead print layouts." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/preview.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ECG 12 Lead Generator" />
+  <meta name="twitter:description" content="Educational ECG simulator for 12-lead print layouts." />
+  <meta name="twitter:image" content="assets/preview.svg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Clean UI font. Needs internet the first time; falls back to system fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       APP HEADER / NAVBAR
+       Stays visible while scrolling.
+  ============================================================ -->
+  <header class="app-header">
+    <div class="app-header-inner">
+
+      <div class="header-side header-left">
+        <button id="printBtn" type="button" class="header-btn"> Print / PDF </button>
+      </div>
+
+      <div class="brand-block">
+        <h1>📈 12 Leads ECG Generator 🩺</h1>
+        <p>ECG simulator · for educational purposes</p>
+      </div>
+
+      <div class="header-side header-right">
+        <button id="settingsBtn" type="button" class="header-btn settings-mini-btn">⚙️</button>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       MAIN PAGE
+  ============================================================ -->
+  <div class="page-center">
+    <main class="app-wrapper">
+
+      <!-- ECG CONTROLS ONLY -->
+      <section class="controls-card">
+        <div class="control-area">
+
+          <div class="control-grid">
+
+            <label class="field">
+              <span>קצב לב:</span>
+              <input id="heartRate" type="number" value="75" min="30" max="220" />
+              <small id="heartRateHint" class="hr-range-hint">Recommended: 60–100</small>
+            </label>
+
+            <label class="field field-wide">
+              <span>הפרעת קצב:</span>
+              <select id="rhythm">
+                <option value="normal">Normal Sinus Rhythm</option>
+                <option value="brady">Sinus Bradycardia</option>
+                <option value="tachy">Sinus Tachycardia</option>
+                <option value="afib">Atrial Fibrillation</option>
+                <option value="pvc">PVC</option>
+                <option value="hyperkalemia">Hyperkalemia Look</option>
+                <option value="stemiAnterior">Anterior STEMI Look</option>
+              </select>
+            </label>
+
+            <label class="field field-wide">
+              <span>רעש:</span>
+              <select id="noiseLevel">
+                <option value="0">Clean</option>
+                <option value="0.015">Low</option>
+                <option value="0.035">Medium</option>
+                <option value="0.06">High</option>
+              </select>
+            </label>
+
+            <label class="field checkbox-field">
+              <span>Right ECG:</span>
+              <input id="rightEcgToggle" type="checkbox" />
+            </label>
+
+            <label class="field field-wide compact-slider">
+              <span>Signal height: <strong id="signalHeightValue">45</strong></span>
+              <input id="signalHeightSlider" type="range" min="10" max="130" value="45" />
+            </label>
+
+          </div>
+
+          <!-- Advanced ECG controls (added)-->
+          <details class="advanced-ecg-panel">
+            <summary>Advanced ECG waveform controls</summary>
+
+            <div class="advanced-grid">
+
+              <label class="field">
+                <span>Beat spacing: <strong id="beatSpacingValue">100%</strong></span>
+                <input id="beatSpacingSlider" type="range" min="10" max="200" value="75" />
+              </label>
+
+              <label class="field">
+                <span>P height: <strong id="pHeightValue">100%</strong></span>
+                <input id="pHeightSlider" type="range" min="0" max="350" value="100" />
+              </label>
+
+              <label class="field">
+                <span>Q depth: <strong id="qDepthValue">100%</strong></span>
+                <input id="qDepthSlider" type="range" min="0" max="350" value="100" />
+              </label>
+
+              <label class="field">
+                <span>R height: <strong id="rHeightValue">100%</strong></span>
+                <input id="rHeightSlider" type="range" min="0" max="400" value="100" />
+              </label>
+
+              <label class="field">
+                <span>S depth: <strong id="sDepthValue">100%</strong></span>
+                <input id="sDepthSlider" type="range" min="0" max="350" value="100" />
+              </label>
+
+              <label class="field">
+                <span>T height: <strong id="tHeightValue">100%</strong></span>
+                <input id="tHeightSlider" type="range" min="-250" max="400" value="100" />
+              </label>
+
+              <label class="field">
+                <span>QRS width: <strong id="qrsWidthValue">100%</strong></span>
+                <input id="qrsWidthSlider" type="range" min="25" max="450" value="100" />
+              </label>
+
+              <label class="field">
+                <span>T width: <strong id="tWidthValue">100%</strong></span>
+                <input id="tWidthSlider" type="range" min="25" max="350" value="100" />
+              </label>
+
+            </div>
+
+            <div class="advanced-actions">
+              <button id="resetWaveformBtn" type="button" class="secondary-btn">
+                Reset ECG Sliders
+              </button>
+            </div>
+
+          </details>
+
+        </div>
+      </section>
+
+
+      <!-- ECG CANVAS -->
+      <section class="paper-shell" aria-label="ECG print preview">
+        <div class="ecg-center-wrapper">
+          <canvas id="ecgCanvas" width="1600" height="1000"></canvas>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- SETTINGS POPUP -->
+  <div id="settingsOverlay" class="settings-overlay hidden">
+    <section class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+
+      <header class="settings-header">
+        <h2 id="settingsTitle">Page Settings</h2>
+        <button id="closeSettingsBtn" class="icon-btn" type="button" aria-label="Close settings">✕</button>
+      </header>
+
+      <div class="settings-body">
+        <label class="settings-row">
+          <span>Dark mode</span>
+          <input id="darkModeToggle" type="checkbox" />
+        </label>
+
+        <label class="settings-slider">
+          <span>ECG page scale: <strong id="pageScaleValue">88%</strong></span>
+          <input id="pageScaleSlider" type="range" min="55" max="110" value="88" />
+        </label>
+
+        <label class="settings-slider">
+          <span>Grid opacity: <strong id="gridOpacityValue">100%</strong></span>
+          <input id="gridOpacitySlider" type="range" min="20" max="100" value="100" />
+        </label>
+      </div>
+
+      <footer class="settings-footer">
+        <p class="settings-note">
+          Tip: Settings can be closed with ESC, X,
+           OR by clicking outside the drawer.
+        </p>
+        <button id="resetSettingsBtn" type="button" class="danger-btn">Reset to Default</button>
+        <button id="saveSettingsBtn" type="button">Save & Close</button>
+
+      </footer>
+
+    </section>
+  </div>
+
+
+  <!-- ============================================================
+       SCRIPTS
+       index.html is the starting point.
+       Every path is relative to index.html.
+  ============================================================ -->
+  <script src="data/rhythm-profiles.js"></script>
+
+  <script src="js/ecg-grid.js"></script>
+  <script src="js/ecg-leads.js"></script>
+  <script src="js/ecg-wave.js"></script>
+  <script src="js/ecg-rhythms.js"></script>
+  <script src="js/ecg-renderer.js"></script>
+  <script src="js/ecg-print.js"></script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
