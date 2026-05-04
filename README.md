@@ -52,10 +52,6 @@
   <sub>Click the preview image to open the demo video.</sub>
 </p>
 
-<p align="center">
-  <sub>Click the preview image to open the demo video.</sub>
-</p>
-
 ---
 
 ## About The Project
