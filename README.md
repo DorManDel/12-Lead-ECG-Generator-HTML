@@ -1,6 +1,6 @@
 <div align="center">
 
-  <a href="https://dormandel.github.io/12-Lead-ECG-Generator-HTML/" target="_blank">
+<a href="https://dormandel.github.io/12-Lead-ECG-Generator-HTML/" target="_blank" rel="noopener noreferrer">
   <img src="assets/icon-try.png" alt="ECG Generator Logo - Click to open live demo" width="96" />
 </a>
 
