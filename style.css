@@ -1787,3 +1787,39 @@ canvas {
     max-width: none !important;
   }
 }
+
+/* ============================================================
+   PAGE FOOTER / CREDITS
+============================================================ */
+
+.page-footer {
+  width: 100%;
+  padding: 16px 12px 22px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--muted);
+}
+
+.credits {
+  padding: 6px 14px;
+
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  color: var(--muted);
+
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+
+  opacity: 0.82;
+  user-select: none;
+}
+
+.credits:hover {
+  opacity: 1;
+}
