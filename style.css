@@ -1823,3 +1823,140 @@ canvas {
 .credits:hover {
   opacity: 1;
 }
+
+/* ============================================================
+   FINAL DESKTOP VIEWPORT FIT PATCH
+   Keeps header + controls + ECG + credits inside one desktop view.
+============================================================ */
+
+@media (min-width: 1100px) {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    overflow-y: hidden !important;
+  }
+
+  .app-header {
+    height: 74px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .page-center {
+    height: calc(100dvh - 74px) !important;
+    min-height: 0 !important;
+
+    padding: 8px 16px 6px !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+  }
+
+  .app-wrapper {
+    width: min(100%, 1720px) !important;
+    height: 100% !important;
+    min-height: 0 !important;
+
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+
+    gap: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .controls-card {
+    margin: 0 auto !important;
+    padding: 8px 12px !important;
+    max-width: 1240px !important;
+  }
+
+  .control-grid {
+    width: min(100%, 1160px) !important;
+    margin-inline: auto !important;
+
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  .field {
+    gap: 2px !important;
+  }
+
+  .field span {
+    font-size: 0.78rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .field input,
+  .field select {
+    min-height: 31px !important;
+    height: 31px !important;
+    padding-block: 0 !important;
+  }
+
+  .hr-range-hint {
+    margin-top: 1px !important;
+    font-size: 0.62rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .field-tip {
+    font-size: 0.52rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .paper-shell {
+    min-height: 0 !important;
+    height: 100% !important;
+
+    padding: 8px !important;
+    overflow: hidden !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .ecg-center-wrapper {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    overflow: hidden !important;
+  }
+
+  canvas {
+    height: 100% !important;
+    width: auto !important;
+
+    max-width: 100% !important;
+    max-height: 100% !important;
+
+    object-fit: contain !important;
+  }
+
+  .page-footer {
+    height: 26px !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .credits {
+    padding: 3px 10px !important;
+    font-size: 0.64rem !important;
+    line-height: 1 !important;
+  }
+}
