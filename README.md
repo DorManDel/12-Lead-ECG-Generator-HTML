@@ -1,5 +1,7 @@
 # ECG 12 Lead Generator
 
+Link: https://dormandel.github.io/12-Lead-ECG-Generator-HTML/
+
 Educational 12-lead ECG simulator built with HTML, CSS, and JavaScript.
 
 > ⚠️ This project is for educational and visual simulation purposes only.  

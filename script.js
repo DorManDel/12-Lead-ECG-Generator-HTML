@@ -53,6 +53,37 @@ const controls = {
   printBtn: document.getElementById("printBtn"),
   settingsBtn: document.getElementById("settingsBtn"),
 
+  ecgControlsBtn: document.getElementById("ecgControlsBtn"),
+  ecgControlsOverlay: document.getElementById("ecgControlsOverlay"),
+  closeEcgControlsBtn: document.getElementById("closeEcgControlsBtn"),
+  closeEcgControlsFooterBtn: document.getElementById("closeEcgControlsFooterBtn"),
+
+  drawerBeatSpacingSlider: document.getElementById("drawerBeatSpacingSlider"),
+  drawerBeatSpacingValue: document.getElementById("drawerBeatSpacingValue"),
+
+  drawerPHeightSlider: document.getElementById("drawerPHeightSlider"),
+  drawerPHeightValue: document.getElementById("drawerPHeightValue"),
+
+  drawerQDepthSlider: document.getElementById("drawerQDepthSlider"),
+  drawerQDepthValue: document.getElementById("drawerQDepthValue"),
+
+  drawerRHeightSlider: document.getElementById("drawerRHeightSlider"),
+  drawerRHeightValue: document.getElementById("drawerRHeightValue"),
+
+  drawerSDepthSlider: document.getElementById("drawerSDepthSlider"),
+  drawerSDepthValue: document.getElementById("drawerSDepthValue"),
+
+  drawerTHeightSlider: document.getElementById("drawerTHeightSlider"),
+  drawerTHeightValue: document.getElementById("drawerTHeightValue"),
+
+  drawerQrsWidthSlider: document.getElementById("drawerQrsWidthSlider"),
+  drawerQrsWidthValue: document.getElementById("drawerQrsWidthValue"),
+
+  drawerTWidthSlider: document.getElementById("drawerTWidthSlider"),
+  drawerTWidthValue: document.getElementById("drawerTWidthValue"),
+
+  drawerResetWaveformBtn: document.getElementById("drawerResetWaveformBtn"),
+
   settingsOverlay: document.getElementById("settingsOverlay"),
   closeSettingsBtn: document.getElementById("closeSettingsBtn"),
   saveSettingsBtn: document.getElementById("saveSettingsBtn"),
@@ -66,31 +97,6 @@ const controls = {
   signalHeightSlider: document.getElementById("signalHeightSlider"),
   signalHeightValue: document.getElementById("signalHeightValue"),
 
-  beatSpacingSlider: document.getElementById("beatSpacingSlider"),
-  beatSpacingValue: document.getElementById("beatSpacingValue"),
-
-  pHeightSlider: document.getElementById("pHeightSlider"),
-  pHeightValue: document.getElementById("pHeightValue"),
-
-  qDepthSlider: document.getElementById("qDepthSlider"),
-  qDepthValue: document.getElementById("qDepthValue"),
-
-  rHeightSlider: document.getElementById("rHeightSlider"),
-  rHeightValue: document.getElementById("rHeightValue"),
-
-  sDepthSlider: document.getElementById("sDepthSlider"),
-  sDepthValue: document.getElementById("sDepthValue"),
-
-  tHeightSlider: document.getElementById("tHeightSlider"),
-  tHeightValue: document.getElementById("tHeightValue"),
-
-  qrsWidthSlider: document.getElementById("qrsWidthSlider"),
-  qrsWidthValue: document.getElementById("qrsWidthValue"),
-
-  tWidthSlider: document.getElementById("tWidthSlider"),
-  tWidthValue: document.getElementById("tWidthValue"),
-
-  resetWaveformBtn: document.getElementById("resetWaveformBtn"),
 
   gridOpacitySlider: document.getElementById("gridOpacitySlider"),
   gridOpacityValue: document.getElementById("gridOpacityValue")
@@ -131,6 +137,16 @@ const RHYTHM_RATE_HINTS = {
   pvc: "Usually base rhythm: 60–100",
   hyperkalemia: "Variable: 50–120",
   stemiAnterior: "Often 60–110"
+};
+
+const RHYTHM_DEFAULT_HR = {
+  normal: 75,
+  brady: 45,
+  tachy: 120,
+  afib: 90,
+  pvc: 75,
+  hyperkalemia: 75,
+  stemiAnterior: 80
 };
 
 const STORAGE_KEY = "dor_ecg_generator_prefs_v2";
@@ -189,16 +205,24 @@ function readPrefsFromUI() {
 
   prefs.rightEcg = Boolean(controls.rightEcgToggle.checked);
 
-  prefs.beatSpacing = Number(controls.beatSpacingSlider.value);
+  /*** Waveform Scales - Drawer Source ***/
+  prefs.beatSpacing = Number(controls.drawerBeatSpacingSlider.value);
 
-  /*** Waveform Scales (added)***/
-  prefs.pHeightScale = Number(controls.pHeightSlider.value);
-  prefs.qDepthScale = Number(controls.qDepthSlider.value);
-  prefs.rHeightScale = Number(controls.rHeightSlider.value);
-  prefs.sDepthScale = Number(controls.sDepthSlider.value);
-  prefs.tHeightScale = Number(controls.tHeightSlider.value);
-  prefs.qrsWidthScale = Number(controls.qrsWidthSlider.value);
-  prefs.tWidthScale = Number(controls.tWidthSlider.value);
+  prefs.pHeightScale = Number(controls.drawerPHeightSlider.value);
+  prefs.qDepthScale = Number(controls.drawerQDepthSlider.value);
+  prefs.rHeightScale = Number(controls.drawerRHeightSlider.value);
+  prefs.sDepthScale = Number(controls.drawerSDepthSlider.value);
+  prefs.tHeightScale = Number(controls.drawerTHeightSlider.value);
+  prefs.qrsWidthScale = Number(controls.drawerQrsWidthSlider.value);
+  prefs.tWidthScale = Number(controls.drawerTWidthSlider.value);
+
+  prefs.pHeightScale = Number(controls.drawerPHeightSlider.value);
+  prefs.qDepthScale = Number(controls.drawerQDepthSlider.value);
+  prefs.rHeightScale = Number(controls.drawerRHeightSlider.value);
+  prefs.sDepthScale = Number(controls.drawerSDepthSlider.value);
+  prefs.tHeightScale = Number(controls.drawerTHeightSlider.value);
+  prefs.qrsWidthScale = Number(controls.drawerQrsWidthSlider.value);
+  prefs.tWidthScale = Number(controls.drawerTWidthSlider.value);
 }
 
 /**
@@ -223,15 +247,17 @@ function applyPrefsToUI() {
 
   controls.rightEcgToggle.checked = prefs.rightEcg;
 
-  controls.beatSpacingSlider.value = prefs.beatSpacing;
+  controls.drawerBeatSpacingSlider.value = prefs.beatSpacing;
 
-  controls.pHeightSlider.value = prefs.pHeightScale;
-  controls.qDepthSlider.value = prefs.qDepthScale;
-  controls.rHeightSlider.value = prefs.rHeightScale;
-  controls.sDepthSlider.value = prefs.sDepthScale;
-  controls.tHeightSlider.value = prefs.tHeightScale;
-  controls.qrsWidthSlider.value = prefs.qrsWidthScale;
-  controls.tWidthSlider.value = prefs.tWidthScale;
+  controls.drawerPHeightSlider.value = prefs.pHeightScale;
+  controls.drawerQDepthSlider.value = prefs.qDepthScale;
+  controls.drawerRHeightSlider.value = prefs.rHeightScale;
+  controls.drawerSDepthSlider.value = prefs.sDepthScale;
+  controls.drawerTHeightSlider.value = prefs.tHeightScale;
+  controls.drawerQrsWidthSlider.value = prefs.qrsWidthScale;
+  controls.drawerTWidthSlider.value = prefs.tWidthScale;
+
+  updateDrawerLabels();
 
   updateSettingsLabels();
 
@@ -249,16 +275,27 @@ function updateSettingsLabels() {
   controls.signalHeightValue.textContent = controls.signalHeightSlider.value;
   controls.gridOpacityValue.textContent = `${controls.gridOpacitySlider.value}%`;
 
-  controls.beatSpacingValue.textContent = `${controls.beatSpacingSlider.value}%`;
-
-  controls.pHeightValue.textContent = `${controls.pHeightSlider.value}%`;
-  controls.qDepthValue.textContent = `${controls.qDepthSlider.value}%`;
-  controls.rHeightValue.textContent = `${controls.rHeightSlider.value}%`;
-  controls.sDepthValue.textContent = `${controls.sDepthSlider.value}%`;
-  controls.tHeightValue.textContent = `${controls.tHeightSlider.value}%`;
-  controls.qrsWidthValue.textContent = `${controls.qrsWidthSlider.value}%`;
-  controls.tWidthValue.textContent = `${controls.tWidthSlider.value}%`;
 }
+
+
+
+/**
+ * Updates visible values inside the ECG drawer.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
+function updateDrawerLabels() {
+  controls.drawerBeatSpacingValue.textContent = `${controls.drawerBeatSpacingSlider.value}%`;
+  controls.drawerPHeightValue.textContent = `${controls.drawerPHeightSlider.value}%`;
+  controls.drawerQDepthValue.textContent = `${controls.drawerQDepthSlider.value}%`;
+  controls.drawerRHeightValue.textContent = `${controls.drawerRHeightSlider.value}%`;
+  controls.drawerSDepthValue.textContent = `${controls.drawerSDepthSlider.value}%`;
+  controls.drawerTHeightValue.textContent = `${controls.drawerTHeightSlider.value}%`;
+  controls.drawerQrsWidthValue.textContent = `${controls.drawerQrsWidthSlider.value}%`;
+  controls.drawerTWidthValue.textContent = `${controls.drawerTWidthSlider.value}%`;
+}
+
 
 /**
  * Updates the small heart-rate recommendation text according to rhythm.
@@ -288,15 +325,35 @@ function resetPrefs() {
 }
 
 /**
- * Resets only ECG waveform sliders.
+ * Resets ECG-related controls for the currently selected rhythm.
  *
- * This does not reset page settings like dark mode, grid opacity,
- * or page scale.
+ * This resets:
+ * - HR to the default value of the selected rhythm
+ * - Signal height
+ * - Beat spacing
+ * - P/Q/R/S/T morphology sliders
+ * - QRS/T width sliders
+ *
+ * It does not reset:
+ * - Dark mode
+ * - Page scale
+ * - Grid opacity
+ * - Selected rhythm
+ * - Noise level
+ * - Right ECG
  *
  * Time Complexity: O(1)
  * Space Complexity: O(1)
  */
 function resetWaveformPrefs() {
+  const selectedRhythm = controls.rhythm.value;
+  const selectedProfile = getProfile(selectedRhythm);
+
+  prefs.heartRate =
+    selectedProfile.forcedRate ||
+    RHYTHM_DEFAULT_HR[selectedRhythm] ||
+    DEFAULT_PREFS.heartRate;
+
   prefs.signalHeight = DEFAULT_PREFS.signalHeight;
   prefs.beatSpacing = DEFAULT_PREFS.beatSpacing;
 
@@ -309,6 +366,9 @@ function resetWaveformPrefs() {
   prefs.tWidthScale = DEFAULT_PREFS.tWidthScale;
 
   applyPrefsToUI();
+  updateHeartRateHint();
+  updateDrawerLabels();
+
   savePrefs();
   drawAllLeads(false);
 }
@@ -583,11 +643,11 @@ function drawLead(label, x, y, width, height, heartRate, rhythm, noiseLevel, opt
     : 1;
 
   const SMALL_BOX_PX = 10;
-const PAPER_SPEED_MM_PER_SEC = 25;
-const SECONDS_PER_SMALL_BOX = 1 / PAPER_SPEED_MM_PER_SEC;
-const PIXELS_PER_SECOND = SMALL_BOX_PX / SECONDS_PER_SMALL_BOX;
+  const PAPER_SPEED_MM_PER_SEC = 25;
+  const SECONDS_PER_SMALL_BOX = 1 / PAPER_SPEED_MM_PER_SEC;
+  const PIXELS_PER_SECOND = SMALL_BOX_PX / SECONDS_PER_SMALL_BOX;
 
-const pixelsPerBeat = (60 / heartRate) * PIXELS_PER_SECOND * beatSpacingFactor;
+  const pixelsPerBeat = (60 / heartRate) * PIXELS_PER_SECOND * beatSpacingFactor;
 
   const amplitude = options.signalHeight ?? prefs.signalHeight ?? 45;
 
@@ -700,7 +760,8 @@ function drawAllLeads(shouldReadUI = true) {
   const profile = getProfile(rhythm);
   const noiseLevel = Number(prefs.noiseLevel);
 
-  if (profile.forcedRate) {
+  // Keep forcedRate only when the user did not manually change HR from the default.
+  if (profile.forcedRate && Number(prefs.heartRate) === DEFAULT_PREFS.heartRate) {
     heartRate = profile.forcedRate;
   }
 
@@ -774,11 +835,49 @@ function closeSettings() {
   controls.settingsOverlay.classList.add("hidden");
 }
 
+/**
+ * Opens the ECG waveform controls drawer.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
+function openEcgControls() {
+  controls.ecgControlsOverlay.classList.remove("hidden");
+  controls.ecgControlsOverlay.classList.remove("is-closing");
+  updateDrawerLabels();
+}
+
+/**
+ * Closes the ECG waveform controls drawer with an out animation.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
+function closeEcgControls() {
+  controls.ecgControlsOverlay.classList.add("is-closing");
+
+  window.setTimeout(function () {
+    controls.ecgControlsOverlay.classList.add("hidden");
+    controls.ecgControlsOverlay.classList.remove("is-closing");
+  }, 160);
+}
+
+
 controls.printBtn.addEventListener("click", function () {
   window.print();
 });
 
 controls.settingsBtn.addEventListener("click", openSettings);
+
+controls.ecgControlsBtn.addEventListener("click", openEcgControls);
+controls.closeEcgControlsBtn.addEventListener("click", closeEcgControls);
+controls.closeEcgControlsFooterBtn.addEventListener("click", closeEcgControls);
+
+controls.ecgControlsOverlay.addEventListener("click", function (event) {
+  if (event.target === controls.ecgControlsOverlay) {
+    closeEcgControls();
+  }
+});
 
 controls.closeSettingsBtn.addEventListener("click", closeSettings);
 
@@ -789,8 +888,6 @@ controls.saveSettingsBtn.addEventListener("click", function () {
 
 controls.resetSettingsBtn.addEventListener("click", resetPrefs);
 
-controls.resetWaveformBtn.addEventListener("click", resetWaveformPrefs);
-
 controls.settingsOverlay.addEventListener("click", function (event) {
   if (event.target === controls.settingsOverlay) {
     closeSettings();
@@ -800,25 +897,30 @@ controls.settingsOverlay.addEventListener("click", function (event) {
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     closeSettings();
+    closeEcgControls();
   }
 });
 
+/**
+ * Live page-setting controls.
+ *
+ * These controls affect page view and ECG drawing:
+ * - Dark mode
+ * - ECG page scale
+ * - Signal height
+ * - Grid opacity
+ *
+ * Time Complexity: O(1) per event
+ * Space Complexity: O(1)
+ */
 [
   controls.darkModeToggle,
   controls.pageScaleSlider,
   controls.signalHeightSlider,
-  controls.gridOpacitySlider,
-
-  controls.beatSpacingSlider,
-  controls.pHeightSlider,
-  controls.qDepthSlider,
-  controls.rHeightSlider,
-  controls.sDepthSlider,
-  controls.tHeightSlider,
-  controls.qrsWidthSlider,
-  controls.tWidthSlider
+  controls.gridOpacitySlider
 ].forEach(function (input) {
   input.addEventListener("input", liveUpdateSettings);
+  input.addEventListener("change", liveUpdateSettings);
 });
 
 [
@@ -827,7 +929,29 @@ document.addEventListener("keydown", function (event) {
   controls.noiseLevel,
   controls.rightEcgToggle
 ].forEach(function (input) {
+  input.addEventListener("input", liveUpdateSettings);
   input.addEventListener("change", liveUpdateSettings);
+});
+
+[
+  controls.drawerBeatSpacingSlider,
+  controls.drawerPHeightSlider,
+  controls.drawerQDepthSlider,
+  controls.drawerRHeightSlider,
+  controls.drawerSDepthSlider,
+  controls.drawerTHeightSlider,
+  controls.drawerQrsWidthSlider,
+  controls.drawerTWidthSlider
+].forEach(function (input) {
+  input.addEventListener("input", function () {
+    liveUpdateSettings();
+    updateDrawerLabels();
+  });
+});
+
+controls.drawerResetWaveformBtn.addEventListener("click", function () {
+  resetWaveformPrefs();
+  updateDrawerLabels();
 });
 
 /* #endregion */

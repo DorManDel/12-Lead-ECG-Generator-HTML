@@ -39,17 +39,39 @@
   <header class="app-header">
     <div class="app-header-inner">
 
-      <div class="header-side header-left">
-        <button id="printBtn" type="button" class="header-btn"> Print / PDF </button>
-      </div>
-
-      <div class="brand-block">
-        <h1>📈 12 Leads ECG Generator 🩺</h1>
-        <p>ECG simulator · for educational purposes</p>
-      </div>
-
+      <!-- LEFT: Page settings -->
       <div class="header-side header-right">
-        <button id="settingsBtn" type="button" class="header-btn settings-mini-btn">⚙️</button>
+        <button id="settingsBtn" type="button" class="header-btn settings-mini-btn" title="Page settings"
+          aria-label="Page settings">
+          ⚙️
+        </button>
+      </div>
+
+      <!-- CENTER: Logo + title -->
+      <div class="brand-block">
+        <div class="brand-row">
+          <img src="assets/icon-try.png" alt="ECG Generator Logo" class="brand-logo" />
+
+          <div class="brand-text">
+            <h1 class="brand-title">12 Leads ECG Generator</h1>
+            <p class="brand-subtitle">ECG simulator • for educational purposes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Main actions -->
+      <div class="header-side header-left">
+        <button id="ecgControlsBtn" type="button" class="header-btn ecg-controls-header-btn"
+          title="ECG waveform controls">
+          <span class="btn-icon">🫀</span>
+          <span class="btn-text">ECG Controls</span>
+        </button>
+
+        <button id="printBtn" type="button" class="header-btn print-header-btn">
+          <span class="btn-icon">🖨️</span>
+          <span class="btn-text">Print / PDF</span>
+          <span class="btn-icon">📄</span>
+        </button>
       </div>
 
     </div>
@@ -68,13 +90,14 @@
 
           <div class="control-grid">
 
-            <label class="field">
+            <label class="field field-heart">
               <span>קצב לב:</span>
               <input id="heartRate" type="number" value="75" min="30" max="220" />
               <small id="heartRateHint" class="hr-range-hint">Recommended: 60–100</small>
+              <small class="field-tip">Tip: click the number and use the mouse wheel to change HR.</small>
             </label>
 
-            <label class="field field-wide">
+            <label class="field field-wide field-rhythm">
               <span>הפרעת קצב:</span>
               <select id="rhythm">
                 <option value="normal">Normal Sinus Rhythm</option>
@@ -87,7 +110,7 @@
               </select>
             </label>
 
-            <label class="field field-wide">
+            <label class="field field-wide field-noise">
               <span>רעש:</span>
               <select id="noiseLevel">
                 <option value="0">Clean</option>
@@ -97,73 +120,17 @@
               </select>
             </label>
 
-            <label class="field checkbox-field">
+            <label class="field checkbox-field field-right-ecg">
               <span>Right ECG:</span>
               <input id="rightEcgToggle" type="checkbox" />
             </label>
 
-            <label class="field field-wide compact-slider">
+            <label class="field field-wide compact-slider field-signal-height">
               <span>Signal height: <strong id="signalHeightValue">45</strong></span>
               <input id="signalHeightSlider" type="range" min="10" max="130" value="45" />
             </label>
 
           </div>
-
-          <!-- Advanced ECG controls (added)-->
-          <details class="advanced-ecg-panel">
-            <summary>Advanced ECG waveform controls</summary>
-
-            <div class="advanced-grid">
-
-              <label class="field">
-                <span>Beat spacing: <strong id="beatSpacingValue">100%</strong></span>
-                <input id="beatSpacingSlider" type="range" min="10" max="200" value="75" />
-              </label>
-
-              <label class="field">
-                <span>P height: <strong id="pHeightValue">100%</strong></span>
-                <input id="pHeightSlider" type="range" min="0" max="350" value="100" />
-              </label>
-
-              <label class="field">
-                <span>Q depth: <strong id="qDepthValue">100%</strong></span>
-                <input id="qDepthSlider" type="range" min="0" max="350" value="100" />
-              </label>
-
-              <label class="field">
-                <span>R height: <strong id="rHeightValue">100%</strong></span>
-                <input id="rHeightSlider" type="range" min="0" max="400" value="100" />
-              </label>
-
-              <label class="field">
-                <span>S depth: <strong id="sDepthValue">100%</strong></span>
-                <input id="sDepthSlider" type="range" min="0" max="350" value="100" />
-              </label>
-
-              <label class="field">
-                <span>T height: <strong id="tHeightValue">100%</strong></span>
-                <input id="tHeightSlider" type="range" min="-250" max="400" value="100" />
-              </label>
-
-              <label class="field">
-                <span>QRS width: <strong id="qrsWidthValue">100%</strong></span>
-                <input id="qrsWidthSlider" type="range" min="25" max="450" value="100" />
-              </label>
-
-              <label class="field">
-                <span>T width: <strong id="tWidthValue">100%</strong></span>
-                <input id="tWidthSlider" type="range" min="25" max="350" value="100" />
-              </label>
-
-            </div>
-
-            <div class="advanced-actions">
-              <button id="resetWaveformBtn" type="button" class="secondary-btn">
-                Reset ECG Sliders
-              </button>
-            </div>
-
-          </details>
 
         </div>
       </section>
@@ -209,7 +176,7 @@
       <footer class="settings-footer">
         <p class="settings-note">
           Tip: Settings can be closed with ESC, X,
-           OR by clicking outside the drawer.
+          OR by clicking outside the drawer.
         </p>
         <button id="resetSettingsBtn" type="button" class="danger-btn">Reset to Default</button>
         <button id="saveSettingsBtn" type="button">Save & Close</button>
@@ -219,6 +186,85 @@
     </section>
   </div>
 
+  <!-- ECG CONTROLS DRAWER -->
+  <div id="ecgControlsOverlay" class="drawer-overlay hidden">
+    <aside class="drawer-panel ecg-controls-drawer" role="dialog" aria-modal="true" aria-labelledby="ecgControlsTitle">
+
+      <header class="drawer-header">
+        <h2 id="ecgControlsTitle">ECG Controls</h2>
+        <button id="closeEcgControlsBtn" class="icon-btn" type="button" aria-label="Close ECG controls">
+          ✕
+        </button>
+      </header>
+
+      <div class="drawer-body">
+
+        <section class="drawer-section">
+          <h3>Timing</h3>
+
+          <label class="drawer-slider">
+            <span>Beat spacing: <strong id="drawerBeatSpacingValue">75%</strong></span>
+            <input id="drawerBeatSpacingSlider" type="range" min="10" max="200" value="75" />
+          </label>
+        </section>
+
+        <section class="drawer-section">
+          <h3>Wave Heights</h3>
+
+          <label class="drawer-slider">
+            <span>P height: <strong id="drawerPHeightValue">100%</strong></span>
+            <input id="drawerPHeightSlider" type="range" min="0" max="350" value="100" />
+          </label>
+
+          <label class="drawer-slider">
+            <span>Q depth: <strong id="drawerQDepthValue">100%</strong></span>
+            <input id="drawerQDepthSlider" type="range" min="0" max="350" value="100" />
+          </label>
+
+          <label class="drawer-slider">
+            <span>R height: <strong id="drawerRHeightValue">100%</strong></span>
+            <input id="drawerRHeightSlider" type="range" min="0" max="400" value="100" />
+          </label>
+
+          <label class="drawer-slider">
+            <span>S depth: <strong id="drawerSDepthValue">100%</strong></span>
+            <input id="drawerSDepthSlider" type="range" min="0" max="350" value="100" />
+          </label>
+
+          <label class="drawer-slider">
+            <span>T height: <strong id="drawerTHeightValue">100%</strong></span>
+            <input id="drawerTHeightSlider" type="range" min="-250" max="400" value="100" />
+          </label>
+        </section>
+
+        <section class="drawer-section">
+          <h3>Wave Widths</h3>
+
+          <label class="drawer-slider">
+            <span>QRS width: <strong id="drawerQrsWidthValue">100%</strong></span>
+            <input id="drawerQrsWidthSlider" type="range" min="25" max="450" value="100" />
+          </label>
+
+          <label class="drawer-slider">
+            <span>T width: <strong id="drawerTWidthValue">100%</strong></span>
+            <input id="drawerTWidthSlider" type="range" min="25" max="350" value="100" />
+          </label>
+        </section>
+
+      </div>
+
+      <footer class="drawer-footer">
+        <button id="drawerResetWaveformBtn" type="button" class="secondary-btn">
+          Reset ECG Sliders
+        </button>
+
+        <button id="closeEcgControlsFooterBtn" type="button">
+          Done
+        </button>
+      </footer>
+
+    </aside>
+  </div>
 
   <!-- ============================================================
        SCRIPTS
