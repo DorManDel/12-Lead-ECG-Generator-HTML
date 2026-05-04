@@ -172,7 +172,7 @@ flowchart TD
 ├── assets/
 │   ├── icon-try.png
 │   ├── favicon.svg
-│   ├── preview.svg
+│   ├── preview.png
 │   ├── readme-hero.png
 │   ├── readme-dark.png
 │   ├── readme-controls.png
