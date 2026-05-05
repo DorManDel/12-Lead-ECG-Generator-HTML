@@ -50,6 +50,8 @@ const controls = {
 
   rightEcgToggle: document.getElementById("rightEcgToggle"),
 
+  recommendedHrBtn: document.getElementById("recommendedHrBtn"),
+
   printBtn: document.getElementById("printBtn"),
   settingsBtn: document.getElementById("settingsBtn"),
 
@@ -99,7 +101,7 @@ const controls = {
 
 
   gridOpacitySlider: document.getElementById("gridOpacitySlider"),
-  gridOpacityValue: document.getElementById("gridOpacityValue")
+  gridOpacityValue: document.getElementById("gridOpacityValue"),
 };
 
 /* #endregion */
@@ -601,11 +603,11 @@ function drawWatermark() {
 
   ctx.globalAlpha = 0.34;
   ctx.fillStyle = "#111";
-  ctx.font = "600 18px Rubik, Arial";
+  ctx.font = "600 36px Rubik, Arial";
   ctx.textAlign = "right";
   ctx.direction = "ltr";
 
-  ctx.fillText("Made by Dor Mandel", canvas.width - 40, canvas.height - 28);
+  ctx.fillText("Made by Dor Mandel", canvas.width - 40, canvas.height - 75);
 
   ctx.restore();
 }
@@ -892,6 +894,18 @@ controls.settingsOverlay.addEventListener("click", function (event) {
   if (event.target === controls.settingsOverlay) {
     closeSettings();
   }
+});
+
+controls.recommendedHrBtn.addEventListener("click", function () {
+  const selectedRhythm = controls.rhythm.value;
+
+  const recommendedRate =
+    RHYTHM_DEFAULT_HR[selectedRhythm] ||
+    DEFAULT_PREFS.heartRate;
+
+  controls.heartRate.value = recommendedRate;
+
+  liveUpdateSettings();
 });
 
 document.addEventListener("keydown", function (event) {

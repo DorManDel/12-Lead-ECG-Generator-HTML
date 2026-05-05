@@ -175,7 +175,8 @@ input[type="checkbox"] {
 
 .header-left {
   justify-content: flex-start;
-  direction: ltr; /* keeps Print then heart visually in a clean order */
+  direction: ltr;
+  /* keeps Print then heart visually in a clean order */
 }
 
 .header-right {
@@ -261,11 +262,7 @@ input[type="checkbox"] {
 .control-grid {
   display: grid;
   grid-template-columns:
-    minmax(120px, 0.45fr)
-    minmax(210px, 1fr)
-    minmax(180px, 0.8fr)
-    minmax(90px, 0.35fr)
-    minmax(220px, 0.85fr);
+    minmax(120px, 0.45fr) minmax(210px, 1fr) minmax(180px, 0.8fr) minmax(90px, 0.35fr) minmax(220px, 0.85fr);
 
   gap: 12px;
   align-items: end;
@@ -308,6 +305,24 @@ input[type="checkbox"] {
   font-size: 0.65rem;
   font-weight: 500;
   line-height: 1.25;
+}
+
+.hr-input-row {
+  display: grid;
+  grid-template-columns: minmax(70px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.mini-inline-btn {
+  min-height: 31px;
+  padding: 0 10px;
+
+  border-radius: 10px;
+
+  font-size: 0.68rem;
+  font-weight: 850;
+  white-space: nowrap;
 }
 
 /* #endregion */
@@ -983,6 +998,61 @@ canvas {
   }
 }
 
+/* Print Landscape ECG */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .app-header,
+  .controls-card,
+  .settings-overlay,
+  .drawer-overlay,
+  .page-footer {
+    display: none !important;
+  }
+
+  .page-center,
+  .app-wrapper,
+  .paper-shell,
+  .ecg-center-wrapper {
+    display: block !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+
+    max-width: 100% !important;
+    max-height: none !important;
+
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
 /* #endregion */
 
 /* Temporary: old inline advanced controls are kept in HTML but hidden.
@@ -1135,11 +1205,16 @@ canvas {
   display: grid !important;
 
   grid-template-columns:
-    minmax(280px, 1fr)     /* Signal height */
-    minmax(90px, 0.28fr)   /* Right ECG */
-    minmax(220px, 0.8fr)   /* Noise */
-    minmax(280px, 1fr)     /* Rhythm */
-    minmax(165px, 0.55fr); /* Heart rate */
+    minmax(280px, 1fr)
+    /* Signal height */
+    minmax(90px, 0.28fr)
+    /* Right ECG */
+    minmax(220px, 0.8fr)
+    /* Noise */
+    minmax(280px, 1fr)
+    /* Rhythm */
+    minmax(165px, 0.55fr);
+  /* Heart rate */
 
   gap: 12px !important;
   align-items: start !important;
@@ -1208,11 +1283,16 @@ canvas {
 
   display: grid !important;
   grid-template-columns:
-    minmax(260px, 0.9fr)   /* Signal height */
-    minmax(95px, 0.28fr)   /* Right ECG */
-    minmax(230px, 0.85fr)  /* Noise */
-    minmax(330px, 1.25fr)  /* Rhythm */
-    minmax(165px, 0.45fr); /* Heart rate */
+    minmax(260px, 0.9fr)
+    /* Signal height */
+    minmax(95px, 0.28fr)
+    /* Right ECG */
+    minmax(230px, 0.85fr)
+    /* Noise */
+    minmax(330px, 1.25fr)
+    /* Rhythm */
+    minmax(165px, 0.45fr);
+  /* Heart rate */
 
   grid-template-areas: "signal right noise rhythm heart" !important;
 
@@ -1830,6 +1910,7 @@ canvas {
 ============================================================ */
 
 @media (min-width: 1100px) {
+
   html,
   body {
     height: 100%;
@@ -1876,6 +1957,25 @@ canvas {
     max-width: 1240px !important;
   }
 
+  /* ADDED Tip For Heart Rate */
+  .field-heart {
+    align-self: start !important;
+  }
+
+  .hr-range-hint {
+    margin-top: 3px !important;
+    font-size: 0.68rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .field-tip {
+    margin-top: 2px !important;
+    font-size: 0.62rem !important;
+    line-height: 1.15 !important;
+  }
+
+  /* End of ADDDED Tip for heart rate */
+
   .control-grid {
     width: min(100%, 1160px) !important;
     margin-inline: auto !important;
@@ -1911,16 +2011,17 @@ canvas {
     line-height: 1.05 !important;
   }
 
+  /* PaperShell - ECG sizing Fix Patch Addon */
   .paper-shell {
     min-height: 0 !important;
     height: 100% !important;
 
     padding: 8px !important;
-    overflow: hidden !important;
+    overflow: auto !important;
 
     display: flex !important;
     justify-content: center !important;
-    align-items: center !important;
+    align-items: flex-start !important;
   }
 
   .ecg-center-wrapper {
@@ -1930,20 +2031,35 @@ canvas {
 
     display: flex !important;
     justify-content: center !important;
-    align-items: center !important;
+    align-items: flex-start !important;
 
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   canvas {
-    height: 100% !important;
+    height: calc(100% * var(--ecg-scale)) !important;
     width: auto !important;
 
-    max-width: 100% !important;
-    max-height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
 
     object-fit: contain !important;
   }
+
+  /*
+  End of PaperShell - ECG sizing Fix Patch Addon
+
+    Old behavior:
+     Canvas always = 100% of available height
+     Slider changes --ecg-scale
+     But canvas ignores it
+
+    New behavior:
+      Canvas height = available height × --ecg-scale
+      55%  → smaller ECG
+      88%  → default fit
+      110% → larger ECG, scroll if needed
+  */
 
   .page-footer {
     height: 26px !important;
@@ -1960,3 +2076,75 @@ canvas {
     line-height: 1 !important;
   }
 }
+
+/* Tip Wrapper */
+.tip-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.tip-icon {
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  min-height: 26px;
+
+  padding: 0;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.tip-popup {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+
+  width: 240px;
+  padding: 10px 12px;
+
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+
+  background: var(--card);
+  color: var(--text);
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+
+  font-size: 0.75rem;
+  line-height: 1.35;
+  font-weight: 600;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s ease;
+
+  direction: ltr;
+  text-align: left;
+}
+
+.tip-wrapper:hover .tip-popup,
+.tip-wrapper:focus-within .tip-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.tip-label {
+  margin-inline-end: 6px;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 26px;
+  white-space: nowrap;
+}
+

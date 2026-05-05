@@ -97,9 +97,28 @@
 
             <label class="field field-heart">
               <span>קצב לב:</span>
-              <input id="heartRate" type="number" value="75" min="30" max="220" />
-              <small id="heartRateHint" class="hr-range-hint">Recommended: 60–100</small>
-              <small class="field-tip">Tip: click the number and use the mouse wheel to change HR.</small>
+
+              <div class="hr-input-row">
+                <input id="heartRate" type="number" min="20" max="220" value="75" />
+                <button id="recommendedHrBtn" type="button" class="mini-inline-btn">
+                  Recommended
+                </button>
+              </div>
+
+              <small id="heartRateHint" class="hr-range-hint">
+                Recommended: 60–100
+              </small>
+
+              <!--  Heart Rate Tip + Hover -->
+              <div class="tip-wrapper">
+                <span class="tip-label">Hover for tip</span>
+                <button type="button" class="tip-icon" aria-label="Heart rate help">?</button>
+
+                <div class="tip-popup">
+                  Recommended resting heart rate is usually 60–100 BPM.
+                  You can also use the mouse wheel while hovering over the HR input.
+                </div>
+              </div>
             </label>
 
             <label class="field field-wide field-rhythm">
@@ -174,7 +193,7 @@
 
         <label class="settings-slider">
           <span>ECG page scale: <strong id="pageScaleValue">88%</strong></span>
-          <input id="pageScaleSlider" type="range" min="55" max="110" value="88" />
+          <input id="pageScaleSlider" type="range" min="10" max="300" value="88" />
         </label>
 
         <label class="settings-slider">
