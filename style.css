@@ -307,11 +307,18 @@ input[type="checkbox"] {
   line-height: 1.25;
 }
 
+/* HR Heart Rate Input Box */
 .hr-input-row {
   display: grid;
-  grid-template-columns: minmax(70px, 1fr) auto;
+  grid-template-columns: minmax(95px, 125px) auto;
   gap: 8px;
   align-items: center;
+}
+
+/* stable width and let button take the rest */
+.field-heart input[type="number"] {
+  min-width: 96px !important;
+  max-width: 125px !important;
 }
 
 .mini-inline-btn {
@@ -1282,17 +1289,12 @@ canvas {
   direction: ltr !important;
 
   display: grid !important;
-  grid-template-columns:
-    minmax(260px, 0.9fr)
-    /* Signal height */
-    minmax(95px, 0.28fr)
-    /* Right ECG */
-    minmax(230px, 0.85fr)
-    /* Noise */
-    minmax(330px, 1.25fr)
-    /* Rhythm */
-    minmax(165px, 0.45fr);
-  /* Heart rate */
+grid-template-columns:
+  minmax(220px, 0.75fr)  /* Signal height */
+  minmax(90px, 0.25fr)   /* Right ECG */
+  minmax(180px, 0.55fr)  /* Noise */
+  minmax(250px, 0.80fr)  /* Rhythm */
+  minmax(300px, 0.95fr); /* Heart rate */
 
   grid-template-areas: "signal right noise rhythm heart" !important;
 
@@ -2132,8 +2134,9 @@ canvas {
   text-align: left;
 }
 
-.tip-wrapper:hover .tip-popup,
-.tip-wrapper:focus-within .tip-popup {
+/* Popup appears when hovering over the heart rate field */
+.field-heart:hover .tip-popup,
+.field-heart:focus-within .tip-popup {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -2146,5 +2149,43 @@ canvas {
   font-weight: 700;
   line-height: 26px;
   white-space: nowrap;
+}
+
+/* ============================================================
+   CONTROL TOOLTIPS - temporary HR tooltip
+   Later we will turn this into reusable tooltips for all controls.
+============================================================ */
+
+.tip-wrapper {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+
+  width: 100%;
+  margin-top: 2px;
+}
+
+.tip-label {
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.tip-icon {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  min-height: 22px;
+
+  padding: 0;
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 900;
 }
 
