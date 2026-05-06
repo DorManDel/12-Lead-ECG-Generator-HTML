@@ -187,8 +187,6 @@ input[type="checkbox"] {
   align-items: center;
 }
 
-
-
 .header-left,
 .header-right {
   display: flex;
@@ -2232,13 +2230,6 @@ canvas {
   font-weight: 350;
 }
 
-.tip-wrapper:hover .tip-popup,
-.tip-wrapper:focus-within .tip-popup {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
 /* ============================================================
    SMALL CONTROL NOTES
 ============================================================ */
@@ -2345,16 +2336,58 @@ canvas {
    FIX - tooltip opens from Recommended button only
 ============================================================ */
 
-.tip-wrapper:hover .tip-popup,
-.tip-wrapper:focus-within .tip-popup {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  transform: translateY(-5px) !important;
-}
-
 .recommended-wrapper:hover .tip-popup,
 .recommended-wrapper:focus-within .tip-popup {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* HEADER TYPOGRAPHY */
+.brand-title {
+  font-weight: 325 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* SUBTITLE TYPOGRAPHY */
+.brand-subtitle {
+  font-weight: 100 !important;
+  letter-spacing: 0.0912em !important;
+  opacity: 0.6 !important;
+}
+
+/* Logo to Title Row Alignment */
+.brand-row {
+  align-items: flex-start !important;
+}
+
+.brand-logo {
+  margin-top: -2px !important;
+}
+
+
+/* ============================================================
+   SVG BUTTON ICONS
+   Replaces emojis with stable SVG icons.
+============================================================ */
+
+.btn-svg-icon {
+  width: 17px !important;
+  height: 17px !important;
+
+  display: block !important;
+  flex: 0 0 auto !important;
+
+  opacity: 0.88;
+  object-fit: contain;
+}
+
+/* Dark buttons need light icons */
+body.dark-mode .btn-svg-icon {
+  filter: invert(1);
+}
+
+/* Light mode keeps icons dark */
+body:not(.dark-mode) .btn-svg-icon {
+  filter: none;
 }
