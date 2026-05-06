@@ -52,6 +52,8 @@ const controls = {
 
   recommendedHrBtn: document.getElementById("recommendedHrBtn"),
 
+  fitPageScaleBtn: document.getElementById("fitPageScaleBtn"),
+
   printBtn: document.getElementById("printBtn"),
   settingsBtn: document.getElementById("settingsBtn"),
 
@@ -145,7 +147,7 @@ const RHYTHM_DEFAULT_HR = {
   normal: 75,
   brady: 45,
   tachy: 120,
-  afib: 90,
+  afib: 160,
   pvc: 75,
   hyperkalemia: 75,
   stemiAnterior: 80
@@ -913,6 +915,12 @@ document.addEventListener("keydown", function (event) {
     closeSettings();
     closeEcgControls();
   }
+});
+
+/* Sets page scale to 88% for optimal fit on A4 paper at 25mm/s.*/
+controls.fitPageScaleBtn.addEventListener("click", function () {
+  controls.pageScaleSlider.value = 88;
+  liveUpdateSettings();
 });
 
 /**

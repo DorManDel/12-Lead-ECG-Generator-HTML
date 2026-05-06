@@ -32,7 +32,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- Main stylesheet -- OLD:(until fixing) -->
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <!-- Temporary Clean CSS -->
+  <link rel="stylesheet" href="style.clean.css" />
 </head>
 
 <body>
@@ -132,7 +135,13 @@
             </label>
 
             <label class="field field-wide field-rhythm">
-              <span>הפרעת קצב:</span>
+
+              <div class="field-helper-row">
+                <span class="tip-label hidden-helper">Hover for Tips &amp; How to use</span>
+              </div>
+
+              <span class="field-title">הפרעת קצב:</span>
+
               <select id="rhythm">
                 <option value="normal">Normal Sinus Rhythm</option>
                 <option value="brady">Sinus Bradycardia</option>
@@ -142,32 +151,55 @@
                 <option value="hyperkalemia">Hyperkalemia Look</option>
                 <option value="stemiAnterior">Anterior STEMI Look</option>
               </select>
+              <small class="control-note invisible-note">.</small>
             </label>
 
             <label class="field field-wide field-noise">
-              <span>רעש:</span>
+
+              <div class="field-helper-row">
+                <span class="tip-label hidden-helper">Hover for Tips &amp; How to use</span>
+              </div>
+
+              <span class="field-title">רעש:</span>
+
               <select id="noiseLevel">
                 <option value="0">Clean</option>
                 <option value="0.015">Low</option>
                 <option value="0.035">Medium</option>
                 <option value="0.06">High</option>
               </select>
+              <small class="control-note invisible-note">.</small>
             </label>
 
             <label class="field checkbox-field field-right-ecg">
-              <span>Right ECG:</span>
+
+              <div class="field-helper-row">
+                <span class="tip-label hidden-helper">Hover for Tips &amp; How to use</span>
+              </div>
+
+              <span class="field-title">Right ECG:</span>
+
               <input id="rightEcgToggle" type="checkbox" />
+
+              <small class="control-note invisible-note">.</small>
+
             </label>
 
             <label class="field field-wide compact-slider field-signal-height">
-              <span>
+
+              <div class="field-helper-row">
+                <span class="tip-label hidden-helper">Hover for Tips &amp; How to use</span>
+              </div>
+
+              <span class="field-title">
                 Signal height:
                 <strong id="signalHeightValue">45</strong>
               </span>
 
               <input id="signalHeightSlider" type="range" min="10" max="130" value="45" />
 
-              <small class="default-note">Default - 45</small>
+              <small class="control-note default-note">Default - 45</small>
+
             </label>
           </div>
 
@@ -207,8 +239,15 @@
         </label>
 
         <label class="settings-slider">
-          <span>ECG page scale: <strong id="pageScaleValue">88%</strong></span>
-          <input id="pageScaleSlider" type="range" min="10" max="300" value="88" />
+          <span class="settings-title-row">
+            ECG page scale:
+            <strong id="pageScaleValue">88%</strong>
+          </span>
+
+          <div class="settings-slider-row">
+            <input id="pageScaleSlider" type="range" min="10" max="300" value="88" />
+            <button id="fitPageScaleBtn" type="button" class="small-fit-btn">Fit</button>
+          </div>
         </label>
 
         <label class="settings-slider">
