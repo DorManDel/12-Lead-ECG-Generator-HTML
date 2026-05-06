@@ -1,0 +1,2393 @@
+/* ============================================================
+   ECG 12 LEAD GENERATOR - STYLE.CSS
+============================================================ */
+
+/* ============================================================
+   STYLE.CSS MAP
+
+   00 - Theme Variables
+   01 - Base
+   02 - Header / Navbar
+   03 - Main Layout + Basic Controls
+   04 - Advanced ECG Controls
+   05 - ECG Paper / Canvas
+   06 - Settings Side Drawer
+   06B - ECG Controls Side Drawer
+   07 - Responsive
+   08 - Print
+   09 - Temporary Final Patches
+   10 - Tooltip System
+   11 - Small Control Notes
+
+   IMPORTANT:
+   This file currently contains several old "FINAL PATCH" blocks.
+   Next cleanup step:
+   merge repeated header/control/drawer rules into one clean section.
+  ============================================================ */
+
+
+/* #region 00 - Theme Variables */
+
+:root {
+  --bg: #eef0f4;
+  --card: #ffffff;
+  --card-glass: rgba(255, 255, 255, 0.82);
+  --card-border: #dce1ea;
+  --text: #151922;
+  --muted: #667085;
+
+  --input-bg: #ffffff;
+  --input-border: #dce1ea;
+
+  --button-bg: #f5f7fb;
+  --button-hover: #e9edf5;
+
+  --paper-frame: #ffffff;
+  --ecg-scale: 0.88;
+
+  --accent: #14b8c4;
+  --danger-bg: #ffe1e1;
+  --danger-text: #a01818;
+}
+
+body.dark-mode {
+  --bg: #10151e;
+  --card: #171d28;
+  --card-glass: rgba(23, 29, 40, 0.82);
+  --card-border: #2b3444;
+  --text: #f4f7fb;
+  --muted: #b8c2d2;
+
+  --input-bg: #111720;
+  --input-border: #2b3444;
+
+  --button-bg: #1f2937;
+  --button-hover: #2b3748;
+
+  --paper-frame: #171d28;
+
+  --danger-bg: #3a1f24;
+  --danger-text: #ffb4b4;
+}
+
+/* #endregion */
+
+
+/* #region 01 - Base */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: auto;
+  font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+
+  background: var(--button-bg);
+  color: var(--text);
+
+  font-weight: 800;
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+button:hover {
+  background: var(--button-hover);
+  transform: translateY(-1px);
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 10px;
+
+  color: var(--text);
+  background: var(--input-bg);
+
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: #5b8cff;
+  box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.18);
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-height: auto;
+  accent-color: var(--accent);
+}
+
+/* #endregion */
+
+
+/* #region 02 - Header / Navbar */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  width: 100%;
+  padding: 12px 16px;
+
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid var(--card-border);
+}
+
+.app-header-inner {
+  width: min(100%, 1720px);
+  margin-inline: auto;
+
+  display: grid;
+  grid-template-columns: 180px 1fr 180px;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-side {
+  display: flex;
+  align-items: center;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left {
+  justify-content: flex-start;
+  direction: ltr;
+  /* keeps Print then heart visually in a clean order */
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+.brand-block {
+  direction: ltr;
+  text-align: center;
+  min-width: 0;
+}
+
+.brand-block h1 {
+  margin: 0;
+
+  font-size: clamp(1.25rem, 2vw, 2.1rem);
+  line-height: 1.05;
+  font-weight: 800;
+
+  overflow-wrap: anywhere;
+}
+
+.brand-block p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.header-btn {
+  min-width: 120px;
+  min-height: 42px;
+  padding-inline: 18px;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+.settings-mini-btn {
+  min-width: 52px;
+  width: 52px;
+  padding-inline: 0;
+  border-radius: 16px;
+  font-size: 1.25rem;
+}
+
+/* #endregion */
+
+
+/* #region 03 - Main Layout */
+
+.page-center {
+  width: 100%;
+  min-height: calc(100dvh - 82px);
+  padding: 12px 16px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.app-wrapper {
+  width: min(100%, 1720px);
+
+  display: grid;
+  grid-template-rows: auto minmax(600px, 1fr);
+  gap: 12px;
+}
+
+.controls-card,
+.paper-shell {
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.controls-card {
+  padding: 12px 14px;
+}
+
+.control-area {
+  width: 100%;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(120px, 0.45fr) minmax(210px, 1fr) minmax(180px, 0.8fr) minmax(90px, 0.35fr) minmax(220px, 0.85fr);
+
+  gap: 12px;
+  align-items: end;
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.field span {
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.field-wide {
+  min-width: 0;
+}
+
+.checkbox-field {
+  justify-items: center;
+}
+
+.compact-slider {
+  max-width: none;
+}
+
+.hr-range-hint {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.field-tip {
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* ============================================================
+   HEART RATE CONTROL
+   Tune here:
+   - HR input width: .field-heart input[type="number"]
+   - Recommended button size: .mini-inline-btn
+============================================================ */
+/* HR input box - Heart Rate */
+.hr-input-row {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 8px;
+  align-items: center;
+  justify-content: end;
+}
+
+/* stable width and let button take the rest */
+.field-heart input[type="number"] {
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+
+  text-align: center !important;
+  font-weight: 900 !important;
+}
+
+.mini-inline-btn {
+  min-height: 31px;
+  width: 122px;
+
+  padding: 0 10px;
+  border-radius: 10px;
+
+  font-size: 0.68rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   HEART RATE INTERNAL ORDER
+   Keeps the tip text at the TOP of the HR control.
+============================================================ */
+
+.field-heart .tip-wrapper {
+  order: 1;
+}
+
+.field-heart > span {
+  order: 2;
+}
+
+.field-heart .hr-input-row {
+  order: 3;
+}
+
+.field-heart .hr-range-hint {
+  order: 4;
+}
+
+/* #endregion */
+
+
+/* #region 04 - Advanced ECG Controls */
+
+.advanced-ecg-panel {
+  margin-top: 10px;
+  border-top: 1px solid var(--card-border);
+  padding-top: 10px;
+}
+
+.advanced-ecg-panel summary {
+  cursor: pointer;
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+  user-select: none;
+}
+
+.advanced-grid {
+  margin-top: 14px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 10px;
+}
+
+.advanced-grid .field {
+  padding: 9px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 88%, #ffffff 4%);
+}
+
+.advanced-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.secondary-btn {
+  min-height: 36px;
+  padding-inline: 14px;
+  font-size: 0.9rem;
+}
+
+/* #endregion */
+
+
+/* #region 05 - ECG Paper */
+
+.paper-shell {
+  min-height: 0;
+  padding: 18px;
+  overflow: auto;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  background: var(--paper-frame);
+}
+
+.ecg-center-wrapper {
+  width: max-content;
+  min-width: 100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  display: block;
+
+  width: calc(1600px * var(--ecg-scale));
+  max-width: none;
+  height: auto;
+
+  aspect-ratio: 16 / 10;
+  background: #fffafa;
+  border: 1px solid #d8caca;
+}
+
+/* #endregion */
+
+
+/* #region 06 - Settings Side Drawer */
+
+.hidden {
+  display: none !important;
+}
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  padding: 0;
+}
+
+.settings-modal {
+  width: min(380px, 92vw);
+  height: 100dvh;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+
+  background: var(--card-glass);
+  color: var(--text);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border-left: 1px solid color-mix(in srgb, var(--card-border) 70%, transparent);
+  box-shadow: -18px 0 55px rgba(0, 0, 0, 0.28);
+
+  overflow: hidden;
+
+  animation: drawerSettleFromLeft 0.18s ease-out;
+}
+
+/*
+  Drawer stays on the RIGHT,
+  but starts slightly from the left and settles rightward.
+*/
+@keyframes drawerSettleFromLeft {
+  from {
+    transform: translateX(-24px);
+    opacity: 0.65;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawerOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-24px);
+    opacity: 0;
+  }
+}
+
+.settings-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.settings-header h2 {
+  margin: 0;
+  width: 100%;
+
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.settings-header .icon-btn {
+  position: absolute;
+  right: 14px;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 12px;
+  font-size: 1.35rem;
+}
+
+.settings-body {
+  overflow-y: auto;
+
+  display: grid;
+  align-content: start;
+  gap: 20px;
+
+  padding: 18px 16px;
+}
+
+.settings-row,
+.settings-slider {
+  display: grid;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.settings-row {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.settings-footer {
+  display: grid;
+  gap: 10px;
+
+  padding: 16px;
+  border-top: 1px solid var(--card-border);
+}
+
+.settings-footer button {
+  min-height: 42px;
+  padding: 12px 16px;
+}
+
+.danger-btn {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.settings-note {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* #endregion */
+
+
+/* #region 07 - Responsive */
+
+@media (max-width: 900px) {
+  .app-header-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .header-side {
+    justify-content: center;
+  }
+
+  .brand-block {
+    text-align: center;
+  }
+
+  .page-center {
+    display: block;
+    padding: 10px;
+  }
+
+  .app-wrapper {
+    grid-template-rows: auto auto;
+  }
+
+  .control-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .paper-shell {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-modal {
+    width: min(390px, 94vw);
+  }
+}
+
+/* #endregion */
+
+
+/* #region 06B - ECG Controls Side Drawer
+   ============================================================
+   Right-side drawer for ECG waveform controls.
+============================================================ */
+
+.drawer-overlay.hidden {
+  display: none !important;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+
+  display: block;
+
+  background: transparent;
+  padding: 0;
+  pointer-events: auto;
+}
+
+.drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  width: min(420px, 94vw);
+  height: 100dvh;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+
+  background: var(--card-glass);
+  color: var(--text);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border-left: 1px solid color-mix(in srgb, var(--card-border) 70%, transparent);
+  box-shadow: -18px 0 55px rgba(0, 0, 0, 0.28);
+
+  overflow: hidden;
+
+  animation: drawerInFromRight 0.18s ease-out;
+}
+
+.drawer-overlay.is-closing .drawer-panel {
+  animation: drawerOutToRight 0.16s ease-in forwards;
+}
+
+@keyframes drawerInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0.72;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawerOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.drawer-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.drawer-header h2 {
+  margin: 0;
+  width: 100%;
+
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.drawer-header .icon-btn {
+  position: absolute;
+  left: 14px;
+  right: auto;
+}
+
+.drawer-body {
+  overflow-y: auto;
+  padding: 16px;
+
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.drawer-section {
+  display: grid;
+  gap: 12px;
+
+  padding: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+
+  background: color-mix(in srgb, var(--card) 88%, #ffffff 4%);
+}
+
+.drawer-section h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.drawer-slider {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.drawer-slider span {
+  font-size: 0.9rem;
+}
+
+.drawer-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.drawer-footer {
+  display: grid;
+  gap: 10px;
+
+  padding: 16px;
+  border-top: 1px solid var(--card-border);
+}
+
+.drawer-footer button {
+  min-height: 42px;
+}
+
+/* Header ECG Controls button */
+.ecg-controls-header-btn {
+  width: auto;
+  min-width: 160px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding-inline: 14px;
+}
+
+.ecg-controls-header-btn .btn-icon {
+  font-size: 1.15rem;
+}
+
+.ecg-controls-header-btn .btn-text {
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+/* #endregion */
+.drawer-overlay.hidden {
+  display: none !important;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+
+  background: transparent;
+  padding: 0;
+}
+
+.drawer-panel {
+  width: min(420px, 94vw);
+  height: 100dvh;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+
+  background: var(--card-glass);
+  color: var(--text);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border-left: 1px solid color-mix(in srgb, var(--card-border) 70%, transparent);
+  box-shadow: -18px 0 55px rgba(0, 0, 0, 0.28);
+
+  overflow: hidden;
+
+  animation: drawerSettleFromLeft 0.18s ease-out;
+}
+
+.drawer-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.drawer-header h2 {
+  margin: 0;
+  width: 100%;
+
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.drawer-header .icon-btn {
+  position: absolute;
+  right: 14px;
+}
+
+.drawer-body {
+  overflow-y: auto;
+  padding: 16px;
+
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.drawer-section {
+  display: grid;
+  gap: 12px;
+
+  padding: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+
+  background: color-mix(in srgb, var(--card) 88%, #ffffff 4%);
+}
+
+.drawer-section h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.drawer-slider {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.drawer-slider span {
+  font-size: 0.9rem;
+}
+
+.drawer-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.drawer-footer {
+  display: grid;
+  gap: 10px;
+
+  padding: 16px;
+  border-top: 1px solid var(--card-border);
+}
+
+.drawer-footer button {
+  min-height: 42px;
+}
+
+/* #endregion */
+
+/* ============================================================
+   FINAL DRAWER OVERRIDE - fixes duplicated drawer CSS
+============================================================ */
+
+.drawer-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9998 !important;
+
+  display: block !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.drawer-overlay.hidden {
+  display: none !important;
+}
+
+.drawer-panel {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+
+  width: min(420px, 94vw) !important;
+  height: 100dvh !important;
+
+  animation: drawerInFromRight 0.18s ease-out !important;
+}
+
+.drawer-overlay.is-closing .drawer-panel {
+  animation: drawerOutToRight 0.16s ease-in forwards !important;
+}
+
+@keyframes drawerInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0.72;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawerOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* #region 08 - Print */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .app-header,
+  .controls-card,
+  .settings-overlay {
+    display: none !important;
+  }
+
+  .page-center,
+  .app-wrapper {
+    display: block;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .paper-shell {
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  canvas {
+    width: 100%;
+    border: none;
+  }
+}
+
+/* Print Landscape ECG */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .app-header,
+  .controls-card,
+  .settings-overlay,
+  .drawer-overlay,
+  .page-footer {
+    display: none !important;
+  }
+
+  .page-center,
+  .app-wrapper,
+  .paper-shell,
+  .ecg-center-wrapper {
+    display: block !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+
+    max-width: 100% !important;
+    max-height: none !important;
+
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* #endregion */
+
+/* Temporary: old inline advanced controls are kept in HTML but hidden.
+   Real ECG controls now live in the side drawer. */
+.advanced-ecg-panel {
+  display: none !important;
+}
+
+/* ============================================================
+   PATCH - Header layout fix
+   Keeps title centered and prevents Print/PDF overflow.
+============================================================ */
+
+.app-header-inner {
+  grid-template-columns: minmax(90px, 1fr) auto minmax(280px, 1fr) !important;
+  gap: 12px !important;
+}
+
+.header-left,
+.header-right {
+  min-width: 0;
+}
+
+.header-left {
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+}
+
+.header-right {
+  justify-content: flex-start !important;
+}
+
+#printBtn {
+  min-width: 96px !important;
+  max-width: 112px !important;
+  padding-inline: 10px !important;
+  line-height: 1.05 !important;
+  white-space: normal !important;
+}
+
+.ecg-controls-header-btn {
+  min-width: 142px !important;
+  max-width: 160px !important;
+  padding-inline: 10px !important;
+  white-space: nowrap !important;
+}
+
+/* ============================================================
+   FINAL HEADER + CONTROL BAR POLISH PATCH
+   Stable LTR header layout inside an RTL page.
+   - Settings stays on the left
+   - Title stays centered
+   - ECG Controls + Print/PDF stay on the right
+   - Print/PDF text becomes smaller
+============================================================ */
+
+/* Force predictable header layout, independent of page RTL */
+.app-header-inner {
+  direction: ltr !important;
+
+  display: grid !important;
+  grid-template-columns: minmax(90px, 1fr) auto minmax(260px, 1fr) !important;
+  grid-template-areas: "settings brand actions" !important;
+
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+/* In your HTML, header-left contains ECG Controls + Print */
+.header-left {
+  grid-area: actions !important;
+
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+
+  min-width: 0 !important;
+  direction: ltr !important;
+}
+
+/* In your HTML, header-right contains the settings button */
+.header-right {
+  grid-area: settings !important;
+
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+
+  min-width: 0 !important;
+  direction: ltr !important;
+}
+
+.brand-block {
+  grid-area: brand !important;
+  justify-self: center !important;
+  text-align: center !important;
+  direction: ltr !important;
+}
+
+/* Smaller, cleaner print button */
+#printBtn {
+  min-width: 96px !important;
+  max-width: 108px !important;
+  min-height: 42px !important;
+
+  padding: 6px 9px !important;
+
+  font-size: 0.82rem !important;
+  line-height: 1.05 !important;
+  white-space: normal !important;
+  text-align: center !important;
+}
+
+/* ECG Controls button still readable but not huge */
+.ecg-controls-header-btn {
+  min-width: 132px !important;
+  max-width: 150px !important;
+  min-height: 42px !important;
+
+  padding-inline: 10px !important;
+
+  font-size: 0.88rem !important;
+  white-space: nowrap !important;
+}
+
+.ecg-controls-header-btn .btn-icon {
+  font-size: 1rem !important;
+}
+
+.ecg-controls-header-btn .btn-text {
+  font-size: 0.82rem !important;
+}
+
+/* Keep the settings gear compact */
+#settingsBtn {
+  min-width: 52px !important;
+  width: 52px !important;
+  height: 42px !important;
+  padding: 0 !important;
+}
+
+/* ============================================================
+   FINAL CONTROL BAR ALIGNMENT PATCH
+   Align HR with rhythm/noise/right/signal controls.
+============================================================ */
+
+.control-grid {
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(280px, 1fr)
+    /* Signal height */
+    minmax(90px, 0.28fr)
+    /* Right ECG */
+    minmax(220px, 0.8fr)
+    /* Noise */
+    minmax(280px, 1fr)
+    /* Rhythm */
+    minmax(165px, 0.55fr);
+  /* Heart rate */
+
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+.field {
+  align-content: start !important;
+}
+
+.field input,
+.field select {
+  min-height: 40px !important;
+}
+
+.hr-range-hint {
+  margin-top: 4px !important;
+  font-size: 0.72rem !important;
+  line-height: 1.15 !important;
+}
+
+.field-tip {
+  max-width: 160px !important;
+  font-size: 0.60rem !important;
+  line-height: 1.1 !important;
+  color: var(--muted) !important;
+}
+
+/* Tablet / smaller width safety */
+@media (max-width: 1100px) {
+  .app-header-inner {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "brand"
+      "actions"
+      "settings" !important;
+  }
+
+  .header-left,
+  .header-right {
+    justify-content: center !important;
+  }
+
+  .control-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .control-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #printBtn,
+  .ecg-controls-header-btn {
+    max-width: none !important;
+  }
+}
+
+/* ============================================================
+   FINAL PATCH - Stable ECG top control layout
+   Uses explicit grid areas instead of relying on RTL source order.
+============================================================ */
+
+/* ============================================================
+   TOP CONTROL BAR - FINAL TUNING BEFORE CLEANUP
+   Column order:
+   1. Signal height
+   2. Right ECG
+   3. Noise
+   4. Rhythm
+   5. Heart rate
+
+   How to tune:
+   - Make Signal shorter/longer: change first minmax()
+   - Make Rhythm shorter/longer: change fourth minmax()
+   - Make HR wider/narrower: change fifth minmax()
+   - Change spacing between controls: change gap
+============================================================ */
+
+.control-grid {
+  direction: ltr !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(180px, 0.58fr)  /* Signal height - slider length */
+    minmax(82px, 0.20fr)   /* Right ECG checkbox */
+    minmax(170px, 0.52fr)  /* Noise */
+    minmax(215px, 0.66fr)  /* Rhythm */
+    minmax(250px, 0.72fr); /* Heart rate */
+
+  grid-template-areas: "signal right noise rhythm heart" !important;
+
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+.field-signal-height {
+  grid-area: signal !important;
+}
+
+.field-right-ecg {
+  grid-area: right !important;
+}
+
+.field-noise {
+  grid-area: noise !important;
+}
+
+.field-rhythm {
+  grid-area: rhythm !important;
+}
+
+.field-heart {
+  grid-area: heart !important;
+}
+
+/* Keep Hebrew labels aligned naturally inside each field */
+.control-grid .field {
+  direction: rtl !important;
+  min-width: 0 !important;
+  align-content: start !important;
+}
+
+/* Give selects enough internal room */
+.field-rhythm select,
+.field-noise select {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* Keep HR compact but readable */
+.field-heart input {
+  width: 100% !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+}
+
+.field-heart .hr-range-hint,
+.field-heart .field-tip {
+  text-align: right !important;
+  max-width: none !important;
+}
+
+/* Print button polish */
+#printBtn {
+  min-width: 92px !important;
+  max-width: 105px !important;
+  padding: 5px 8px !important;
+  font-size: 0.78rem !important;
+  line-height: 1.05 !important;
+  white-space: normal !important;
+}
+
+/* Responsive fallback */
+@media (max-width: 1150px) {
+  .control-grid {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-areas:
+      "heart rhythm"
+      "noise right"
+      "signal signal" !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .control-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "heart"
+      "rhythm"
+      "noise"
+      "right"
+      "signal" !important;
+  }
+}
+
+/* ============================================================
+   HEADER / BRAND POLISH
+============================================================ */
+
+.topbar {
+  display: grid;
+  grid-template-columns: 84px 1fr auto;
+  align-items: center;
+  gap: 16px;
+
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.topbar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.brand-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  margin-right: 24px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.brand-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.95rem;
+  opacity: 0.82;
+}
+
+.action-btn,
+.icon-btn {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(27, 39, 59, 0.96), rgba(20, 30, 46, 0.96));
+  color: #f4f7fb;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.icon-btn {
+  min-width: 52px;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 1.15rem;
+}
+
+.action-btn {
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  line-height: 1.1;
+}
+
+#printBtn {
+  font-size: 0.88rem;
+  padding: 7px 12px;
+  min-width: 96px;
+}
+
+/* ============================================================
+   BASIC CONTROLS SECTION - CENTER IT BETTER
+============================================================ */
+
+.controls-panel,
+.control-panel,
+.main-controls,
+.basic-controls-shell {
+  max-width: 1220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* If your basic controls sit in a generic card, this also helps */
+.control-grid {
+  max-width: 1220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 980px) {
+  .topbar {
+    grid-template-columns: 68px 1fr;
+    grid-template-areas:
+      "left right"
+      "center center";
+    gap: 12px;
+  }
+
+  .topbar-left {
+    grid-area: left;
+  }
+
+  .topbar-right {
+    grid-area: right;
+    justify-content: flex-end;
+  }
+
+  .topbar-center {
+    grid-area: center;
+  }
+
+  .brand-row {
+    gap: 10px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-title {
+    font-size: 1.55rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar-right {
+    gap: 8px;
+  }
+
+  .action-btn {
+    font-size: 0.82rem;
+    padding: 7px 10px;
+  }
+
+  .brand-text {
+    align-items: center;
+  }
+
+  .brand-row {
+    flex-direction: column;
+  }
+
+  .brand-title {
+    font-size: 1.35rem;
+    text-align: center;
+  }
+
+  .brand-subtitle {
+    text-align: center;
+  }
+}
+
+.top-controls-card,
+.controls-card,
+.main-control-card {
+  max-width: 1240px;
+  margin: 14px auto 0 auto;
+}
+
+/* ============================================================
+   FINAL HEADER FIX - Logo + centered title + clean spacing
+   Put this at the VERY BOTTOM of style.css.
+============================================================ */
+
+.app-header {
+  padding: 10px 16px !important;
+}
+
+.app-header-inner {
+  width: min(100%, 1720px) !important;
+  margin-inline: auto !important;
+
+  direction: ltr !important;
+
+  display: grid !important;
+  grid-template-columns: minmax(90px, 1fr) auto minmax(290px, 1fr) !important;
+  grid-template-areas: "settings brand actions" !important;
+
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+/* LEFT SIDE: settings */
+.header-right {
+  grid-area: settings !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  min-width: 0 !important;
+  direction: ltr !important;
+}
+
+/* CENTER: logo + title */
+.brand-block {
+  grid-area: brand !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-width: 0 !important;
+  text-align: center !important;
+  direction: ltr !important;
+}
+
+.brand-row {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 14px !important;
+  min-width: 0 !important;
+}
+
+.brand-logo {
+  width: 42px !important;
+  height: 42px !important;
+
+  margin: 0 !important;
+
+  object-fit: contain !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+}
+
+.brand-text {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+
+  min-width: 0 !important;
+}
+
+.brand-title {
+  margin: 0 !important;
+
+  font-size: clamp(1.55rem, 2.05vw, 2.15rem) !important;
+  line-height: 1.02 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.2px !important;
+
+  white-space: nowrap !important;
+}
+
+.brand-subtitle {
+  margin: 5px 0 0 0 !important;
+
+  width: 100% !important;
+
+  color: var(--muted) !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+
+  text-align: center !important;
+}
+
+/* RIGHT SIDE: ECG Controls + Print */
+.header-left {
+  grid-area: actions !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+
+  gap: 10px !important;
+  min-width: 0 !important;
+
+  direction: ltr !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Shared header button polish */
+.header-btn {
+  min-height: 42px !important;
+
+  border-radius: 14px !important;
+  border: 1px solid var(--card-border) !important;
+
+  background: var(--button-bg) !important;
+  color: var(--text) !important;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10) !important;
+
+  font-weight: 850 !important;
+}
+
+/* Settings gear */
+#settingsBtn {
+  width: 52px !important;
+  min-width: 52px !important;
+  height: 42px !important;
+
+  padding: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-size: 1.18rem !important;
+}
+
+/* ECG controls button */
+.ecg-controls-header-btn {
+  width: auto !important;
+  min-width: 138px !important;
+  max-width: 156px !important;
+
+  padding: 7px 12px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+
+  white-space: nowrap !important;
+  font-size: 0.84rem !important;
+  line-height: 1.05 !important;
+}
+
+.ecg-controls-header-btn .btn-icon {
+  font-size: 1rem !important;
+}
+
+.ecg-controls-header-btn .btn-text {
+  font-size: 0.82rem !important;
+  white-space: nowrap !important;
+}
+
+/* Print button */
+.print-header-btn,
+#printBtn {
+  width: auto !important;
+  min-width: 104px !important;
+  max-width: 122px !important;
+
+  padding: 6px 10px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+
+  font-size: 0.76rem !important;
+  line-height: 1.05 !important;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+#printBtn .btn-icon {
+  font-size: 0.82rem !important;
+}
+
+#printBtn .btn-text {
+  font-size: 0.78rem !important;
+  font-weight: 850 !important;
+}
+
+/* ============================================================
+   BASIC CONTROLS WRAPPER - more centered under title
+============================================================ */
+
+.controls-card {
+  width: min(100%, 1640px) !important;
+  margin-inline: auto !important;
+}
+
+.control-area {
+  width: 100% !important;
+  margin-inline: auto !important;
+}
+
+.control-grid {
+  width: min(100%, 1320px) !important;
+  margin-inline: auto !important;
+}
+
+/* ============================================================
+   HEADER RESPONSIVE SAFETY
+============================================================ */
+
+@media (max-width: 1050px) {
+  .app-header-inner {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "brand"
+      "actions"
+      "settings" !important;
+  }
+
+  .brand-block,
+  .header-left,
+  .header-right {
+    justify-content: center !important;
+  }
+
+  .brand-text {
+    align-items: center !important;
+  }
+
+  .brand-title {
+    white-space: normal !important;
+    text-align: center !important;
+  }
+
+  .header-left {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-row {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .brand-logo {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .brand-title {
+    font-size: 1.35rem !important;
+  }
+
+  .brand-subtitle {
+    font-size: 0.82rem !important;
+  }
+
+  .ecg-controls-header-btn,
+  .print-header-btn,
+  #printBtn {
+    max-width: none !important;
+  }
+}
+
+/* ============================================================
+   PAGE FOOTER / CREDITS
+============================================================ */
+
+.page-footer {
+  width: 100%;
+  padding: 16px 12px 22px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--muted);
+}
+
+.credits {
+  padding: 6px 14px;
+
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  color: var(--muted);
+
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+
+  opacity: 0.82;
+  user-select: none;
+}
+
+.credits:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   FINAL DESKTOP VIEWPORT FIT PATCH
+   Keeps header + controls + ECG + credits inside one desktop view.
+============================================================ */
+
+@media (min-width: 1100px) {
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    overflow-y: hidden !important;
+  }
+
+  .app-header {
+    height: 74px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .page-center {
+    height: calc(100dvh - 74px) !important;
+    min-height: 0 !important;
+
+    padding: 8px 16px 6px !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+  }
+
+  .app-wrapper {
+    width: min(100%, 1720px) !important;
+    height: 100% !important;
+    min-height: 0 !important;
+
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+
+    gap: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .controls-card {
+    margin: 0 auto !important;
+    padding: 8px 12px !important;
+    max-width: 1240px !important;
+  }
+
+  /* ADDED Tip For Heart Rate */
+  .field-heart {
+    align-self: start !important;
+  }
+
+  .hr-range-hint {
+    margin-top: 3px !important;
+    font-size: 0.68rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .field-tip {
+    margin-top: 2px !important;
+    font-size: 0.62rem !important;
+    line-height: 1.15 !important;
+  }
+
+  /* End of ADDDED Tip for heart rate */
+
+  .control-grid {
+    width: min(100%, 1160px) !important;
+    margin-inline: auto !important;
+
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  .field {
+    gap: 2px !important;
+  }
+
+  .field span {
+    font-size: 0.78rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .field input,
+  .field select {
+    min-height: 31px !important;
+    height: 31px !important;
+    padding-block: 0 !important;
+  }
+
+  .hr-range-hint {
+    margin-top: 1px !important;
+    font-size: 0.62rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .field-tip {
+    font-size: 0.52rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* PaperShell - ECG sizing Fix Patch Addon */
+  .paper-shell {
+    min-height: 0 !important;
+    height: 100% !important;
+
+    padding: 8px !important;
+    overflow: auto !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+  }
+
+  .ecg-center-wrapper {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+
+    overflow: visible !important;
+  }
+
+  canvas {
+    height: calc(100% * var(--ecg-scale)) !important;
+    width: auto !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    object-fit: contain !important;
+  }
+
+  /*
+  End of PaperShell - ECG sizing Fix Patch Addon
+
+    Old behavior:
+     Canvas always = 100% of available height
+     Slider changes --ecg-scale
+     But canvas ignores it
+
+    New behavior:
+      Canvas height = available height × --ecg-scale
+      55%  → smaller ECG
+      88%  → default fit
+      110% → larger ECG, scroll if needed
+  */
+
+  .page-footer {
+    height: 26px !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .credits {
+    padding: 3px 10px !important;
+    font-size: 0.64rem !important;
+    line-height: 1 !important;
+  }
+}
+
+/* ============================================================
+   CONTROL TOOLTIPS - TEMP SYSTEM
+   Later this becomes reusable for every control.
+============================================================ */
+
+.tip-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 100%;
+  margin: 0 0 4px 0;
+
+  direction: ltr;
+}
+
+.tip-label {
+  color: var(--muted);
+
+  font-size: 0.0rem;
+  font-weight: 450;
+  line-height: 1.1;
+  white-space: nowrap;
+
+  opacity: 0.72;
+  cursor: help;
+}
+
+.tip-label:hover {
+  opacity: 1;
+}
+
+.tip-popup {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: calc(100% + 8px);
+  z-index: 50;
+
+  width: 255px;
+  padding: 10px 12px;
+
+  display: grid;
+  gap: 7px;
+
+  direction: ltr;
+  text-align: left;
+
+  border: 1px solid var(--card-border);
+  border-radius: 13px;
+
+  background: var(--card);
+  color: var(--text);
+
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.20);
+
+  font-size: 0.78rem;
+  line-height: 1.45;
+  font-weight: 300;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s ease;
+}
+
+.tip-popup strong {
+  display: block;
+  text-align: center;
+
+  font-size: 0.74rem;
+  font-weight: 350;
+}
+
+/* ============================================================
+   SMALL CONTROL NOTES
+============================================================ */
+
+.default-note {
+  display: block;
+
+  margin-top: 1px;
+  color: var(--muted);
+
+  font-size: 0.52rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   CONTROL NOTE ALIGNMENT
+   Keeps Signal default note aligned with HR recommendation note.
+============================================================ */
+
+.default-note,
+.hr-range-hint {
+  min-height: 13px !important;
+
+  margin-top: 2px !important;
+
+  color: var(--muted) !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
+}
+
+.default-note {
+  text-align: right !important;
+}
+
+.hr-range-hint {
+  text-align: right !important;
+}
+
+/* ============================================================
+   FIX - HR input row order
+   Goal:
+   [ Recommended button ] [ HR input ]
+
+   Tune here:
+   - Recommended width: 122px
+   - HR input width: 112px
+   - Gap between them: 8px
+============================================================ */
+
+.hr-input-row {
+  direction: ltr !important;
+
+  display: grid !important;
+  grid-template-columns: 122px 112px !important;
+  grid-template-areas: "recommended hrinput" !important;
+
+  gap: 8px !important;
+  align-items: center !important;
+  justify-content: start !important;
+
+  height: 31px !important;
+}
+
+.recommended-wrapper {
+  grid-area: recommended !important;
+
+  position: relative !important;
+  display: inline-flex !important;
+
+  width: 122px !important;
+  height: 31px !important;
+}
+
+.field-heart input[type="number"] {
+  grid-area: hrinput !important;
+
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+
+  height: 31px !important;
+  min-height: 31px !important;
+
+  text-align: center !important;
+  font-weight: 900 !important;
+}
+
+.mini-inline-btn {
+  width: 122px !important;
+  min-width: 122px !important;
+  max-width: 122px !important;
+
+  height: 31px !important;
+  min-height: 31px !important;
+
+  padding: 0 10px !important;
+}
+
+/* ============================================================
+   FIX - tooltip opens from Recommended button only
+============================================================ */
+
+.recommended-wrapper:hover .tip-popup,
+.recommended-wrapper:focus-within .tip-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* HEADER TYPOGRAPHY */
+.brand-title {
+  font-weight: 325 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* SUBTITLE TYPOGRAPHY */
+.brand-subtitle {
+  font-weight: 100 !important;
+  letter-spacing: 0.0912em !important;
+  opacity: 0.6 !important;
+}
+
+/* Logo to Title Row Alignment */
+.brand-row {
+  align-items: flex-start !important;
+}
+
+.brand-logo {
+  margin-top: -2px !important;
+}
+
+
+/* ============================================================
+   SVG BUTTON ICONS
+   Replaces emojis with stable SVG icons.
+============================================================ */
+
+.btn-svg-icon {
+  width: 17px !important;
+  height: 17px !important;
+
+  display: block !important;
+  flex: 0 0 auto !important;
+
+  opacity: 0.88;
+  object-fit: contain;
+}
+
+/* Dark buttons need light icons */
+body.dark-mode .btn-svg-icon {
+  filter: invert(1);
+}
+
+/* Light mode keeps icons dark */
+body:not(.dark-mode) .btn-svg-icon {
+  filter: none;
+}
