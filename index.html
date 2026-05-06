@@ -94,31 +94,41 @@
         <div class="control-area">
 
           <div class="control-grid">
-
             <label class="field field-heart">
-              <span>קצב לב:</span>
 
-              <div class="hr-input-row">
-                <input id="heartRate" type="number" min="20" max="220" value="75" />
-                <button id="recommendedHrBtn" type="button" class="mini-inline-btn">
-                  Recommended
-                </button>
+              <!-- Top helper text -->
+              <div class="field-helper-row">
+                <span class="tip-label">Hover for Tips &amp; How to use</span>
               </div>
 
-              <small id="heartRateHint" class="hr-range-hint">
+              <!-- Field title -->
+              <span class="field-title">קצב לב:</span>
+
+              <!-- Input row -->
+              <div class="hr-input-row">
+
+                <div class="recommended-wrapper">
+                  <button id="recommendedHrBtn" type="button" class="mini-inline-btn">
+                    Recommended
+                  </button>
+
+                  <div class="tip-popup">
+                    <strong align="center">Heart Rate</strong>
+                    <span>Sets the simulated beats per minute.</span>
+                    <span>(🖱=🐁🎡) Use the mouse wheel while hovering over the HR input.</span>
+                    <span>The Recommended button restores the default HR for the selected rhythm.</span>
+                  </div>
+                </div>
+
+                <input id="heartRate" type="number" min="20" max="220" value="75" />
+
+              </div>
+
+              <!-- Note row -->
+              <small id="heartRateHint" class="control-note hr-range-hint">
                 Recommended: 60–100
               </small>
 
-              <!--  Heart Rate Tip + Hover -->
-              <div class="tip-wrapper">
-                <span class="tip-label">Hover for tip</span>
-                <button type="button" class="tip-icon" aria-label="Heart rate help">?</button>
-
-                <div class="tip-popup">
-                  Recommended resting heart rate is usually 60–100 BPM.
-                  You can also use the mouse wheel while hovering over the HR input.
-                </div>
-              </div>
             </label>
 
             <label class="field field-wide field-rhythm">
@@ -150,10 +160,15 @@
             </label>
 
             <label class="field field-wide compact-slider field-signal-height">
-              <span>Signal height: <strong id="signalHeightValue">45</strong></span>
-              <input id="signalHeightSlider" type="range" min="10" max="130" value="45" />
-            </label>
+              <span>
+                Signal height:
+                <strong id="signalHeightValue">45</strong>
+              </span>
 
+              <input id="signalHeightSlider" type="range" min="10" max="130" value="45" />
+
+              <small class="default-note">Default - 45</small>
+            </label>
           </div>
 
         </div>

@@ -2,6 +2,29 @@
    ECG 12 LEAD GENERATOR - STYLE.CSS
 ============================================================ */
 
+/* ============================================================
+   STYLE.CSS MAP
+
+   00 - Theme Variables
+   01 - Base
+   02 - Header / Navbar
+   03 - Main Layout + Basic Controls
+   04 - Advanced ECG Controls
+   05 - ECG Paper / Canvas
+   06 - Settings Side Drawer
+   06B - ECG Controls Side Drawer
+   07 - Responsive
+   08 - Print
+   09 - Temporary Final Patches
+   10 - Tooltip System
+   11 - Small Control Notes
+
+   IMPORTANT:
+   This file currently contains several old "FINAL PATCH" blocks.
+   Next cleanup step:
+   merge repeated header/control/drawer rules into one clean section.
+  ============================================================ */
+
 
 /* #region 00 - Theme Variables */
 
@@ -307,29 +330,62 @@ input[type="checkbox"] {
   line-height: 1.25;
 }
 
-/* HR Heart Rate Input Box */
+/* ============================================================
+   HEART RATE CONTROL
+   Tune here:
+   - HR input width: .field-heart input[type="number"]
+   - Recommended button size: .mini-inline-btn
+============================================================ */
+/* HR input box - Heart Rate */
 .hr-input-row {
   display: grid;
-  grid-template-columns: minmax(95px, 125px) auto;
+  grid-template-columns: auto auto;
   gap: 8px;
   align-items: center;
+  justify-content: end;
 }
 
 /* stable width and let button take the rest */
 .field-heart input[type="number"] {
-  min-width: 96px !important;
-  max-width: 125px !important;
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+
+  text-align: center !important;
+  font-weight: 900 !important;
 }
 
 .mini-inline-btn {
   min-height: 31px;
-  padding: 0 10px;
+  width: 122px;
 
+  padding: 0 10px;
   border-radius: 10px;
 
   font-size: 0.68rem;
   font-weight: 850;
   white-space: nowrap;
+}
+
+/* ============================================================
+   HEART RATE INTERNAL ORDER
+   Keeps the tip text at the TOP of the HR control.
+============================================================ */
+
+.field-heart .tip-wrapper {
+  order: 1;
+}
+
+.field-heart > span {
+  order: 2;
+}
+
+.field-heart .hr-input-row {
+  order: 3;
+}
+
+.field-heart .hr-range-hint {
+  order: 4;
 }
 
 /* #endregion */
@@ -1285,20 +1341,37 @@ canvas {
    Uses explicit grid areas instead of relying on RTL source order.
 ============================================================ */
 
+/* ============================================================
+   TOP CONTROL BAR - FINAL TUNING BEFORE CLEANUP
+   Column order:
+   1. Signal height
+   2. Right ECG
+   3. Noise
+   4. Rhythm
+   5. Heart rate
+
+   How to tune:
+   - Make Signal shorter/longer: change first minmax()
+   - Make Rhythm shorter/longer: change fourth minmax()
+   - Make HR wider/narrower: change fifth minmax()
+   - Change spacing between controls: change gap
+============================================================ */
+
 .control-grid {
   direction: ltr !important;
 
   display: grid !important;
-grid-template-columns:
-  minmax(220px, 0.75fr)  /* Signal height */
-  minmax(90px, 0.25fr)   /* Right ECG */
-  minmax(180px, 0.55fr)  /* Noise */
-  minmax(250px, 0.80fr)  /* Rhythm */
-  minmax(300px, 0.95fr); /* Heart rate */
+
+  grid-template-columns:
+    minmax(180px, 0.58fr)  /* Signal height - slider length */
+    minmax(82px, 0.20fr)   /* Right ECG checkbox */
+    minmax(170px, 0.52fr)  /* Noise */
+    minmax(215px, 0.66fr)  /* Rhythm */
+    minmax(250px, 0.72fr); /* Heart rate */
 
   grid-template-areas: "signal right noise rhythm heart" !important;
 
-  gap: 14px !important;
+  gap: 12px !important;
   align-items: start !important;
 }
 
@@ -2079,113 +2152,209 @@ grid-template-columns:
   }
 }
 
-/* Tip Wrapper */
-.tip-wrapper {
-  position: relative;
-  display: inline-flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.tip-icon {
-  width: 26px;
-  min-width: 26px;
-  height: 26px;
-  min-height: 26px;
-
-  padding: 0;
-  border-radius: 999px;
-
-  font-size: 0.78rem;
-  font-weight: 900;
-}
-
-.tip-popup {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  z-index: 20;
-
-  width: 240px;
-  padding: 10px 12px;
-
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-
-  background: var(--card);
-  color: var(--text);
-
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-
-  font-size: 0.75rem;
-  line-height: 1.35;
-  font-weight: 600;
-
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-4px);
-
-  transition:
-    opacity 0.15s ease,
-    transform 0.15s ease,
-    visibility 0.15s ease;
-
-  direction: ltr;
-  text-align: left;
-}
-
-/* Popup appears when hovering over the heart rate field */
-.field-heart:hover .tip-popup,
-.field-heart:focus-within .tip-popup {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.tip-label {
-  margin-inline-end: 6px;
-  color: var(--muted);
-  font-size: 0.62rem;
-  font-weight: 700;
-  line-height: 26px;
-  white-space: nowrap;
-}
-
 /* ============================================================
-   CONTROL TOOLTIPS - temporary HR tooltip
-   Later we will turn this into reusable tooltips for all controls.
+   CONTROL TOOLTIPS - TEMP SYSTEM
+   Later this becomes reusable for every control.
 ============================================================ */
 
 .tip-wrapper {
   position: relative;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 6px;
 
   width: 100%;
-  margin-top: 2px;
+  margin: 0 0 4px 0;
+
+  direction: ltr;
 }
 
 .tip-label {
   color: var(--muted);
-  font-size: 0.62rem;
-  font-weight: 800;
-  line-height: 1;
+
+  font-size: 0.0rem;
+  font-weight: 450;
+  line-height: 1.1;
+  white-space: nowrap;
+
+  opacity: 0.72;
+  cursor: help;
+}
+
+.tip-label:hover {
+  opacity: 1;
+}
+
+.tip-popup {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: calc(100% + 8px);
+  z-index: 50;
+
+  width: 255px;
+  padding: 10px 12px;
+
+  display: grid;
+  gap: 7px;
+
+  direction: ltr;
+  text-align: left;
+
+  border: 1px solid var(--card-border);
+  border-radius: 13px;
+
+  background: var(--card);
+  color: var(--text);
+
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.20);
+
+  font-size: 0.78rem;
+  line-height: 1.45;
+  font-weight: 300;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s ease;
+}
+
+.tip-popup strong {
+  display: block;
+  text-align: center;
+
+  font-size: 0.74rem;
+  font-weight: 350;
+}
+
+.tip-wrapper:hover .tip-popup,
+.tip-wrapper:focus-within .tip-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   SMALL CONTROL NOTES
+============================================================ */
+
+.default-note {
+  display: block;
+
+  margin-top: 1px;
+  color: var(--muted);
+
+  font-size: 0.52rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: right;
   white-space: nowrap;
 }
 
-.tip-icon {
-  width: 22px;
-  min-width: 22px;
-  height: 22px;
-  min-height: 22px;
+/* ============================================================
+   CONTROL NOTE ALIGNMENT
+   Keeps Signal default note aligned with HR recommendation note.
+============================================================ */
 
-  padding: 0;
-  border-radius: 999px;
+.default-note,
+.hr-range-hint {
+  min-height: 13px !important;
 
-  font-size: 0.72rem;
-  font-weight: 900;
+  margin-top: 2px !important;
+
+  color: var(--muted) !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
 }
 
+.default-note {
+  text-align: right !important;
+}
+
+.hr-range-hint {
+  text-align: right !important;
+}
+
+/* ============================================================
+   FIX - HR input row order
+   Goal:
+   [ Recommended button ] [ HR input ]
+
+   Tune here:
+   - Recommended width: 122px
+   - HR input width: 112px
+   - Gap between them: 8px
+============================================================ */
+
+.hr-input-row {
+  direction: ltr !important;
+
+  display: grid !important;
+  grid-template-columns: 122px 112px !important;
+  grid-template-areas: "recommended hrinput" !important;
+
+  gap: 8px !important;
+  align-items: center !important;
+  justify-content: start !important;
+
+  height: 31px !important;
+}
+
+.recommended-wrapper {
+  grid-area: recommended !important;
+
+  position: relative !important;
+  display: inline-flex !important;
+
+  width: 122px !important;
+  height: 31px !important;
+}
+
+.field-heart input[type="number"] {
+  grid-area: hrinput !important;
+
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+
+  height: 31px !important;
+  min-height: 31px !important;
+
+  text-align: center !important;
+  font-weight: 900 !important;
+}
+
+.mini-inline-btn {
+  width: 122px !important;
+  min-width: 122px !important;
+  max-width: 122px !important;
+
+  height: 31px !important;
+  min-height: 31px !important;
+
+  padding: 0 10px !important;
+}
+
+/* ============================================================
+   FIX - tooltip opens from Recommended button only
+============================================================ */
+
+.tip-wrapper:hover .tip-popup,
+.tip-wrapper:focus-within .tip-popup {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(-5px) !important;
+}
+
+.recommended-wrapper:hover .tip-popup,
+.recommended-wrapper:focus-within .tip-popup {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
