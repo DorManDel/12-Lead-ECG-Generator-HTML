@@ -1279,55 +1279,90 @@ body.dark-mode .drawer-label-icon {
 
   .app-header {
     height: auto;
+    min-height: 66px;
     position: sticky;
+    padding: 8px 10px;
   }
 
   .app-header-inner {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "brand"
-      "actions"
-      "settings";
-
-    gap: 10px;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    grid-template-areas: "settings brand actions";
+    gap: 8px;
+    align-items: center;
   }
 
-  .header-left,
-  .header-right,
+  .header-right {
+    justify-content: flex-start;
+  }
+
   .brand-block {
     justify-content: center;
+    min-width: 0;
+  }
+
+  .brand-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-title {
+    font-size: clamp(1rem, 3.5vw, 1.55rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-subtitle {
+    font-size: 0.78rem;
+    letter-spacing: 0.035em;
+    white-space: nowrap;
   }
 
   .header-left {
+    justify-content: flex-end;
     flex-wrap: nowrap;
-    gap: 8px;
+    gap: 7px;
+  }
+
+  .settings-mini-btn {
+    width: 44px;
+    min-width: 44px;
   }
 
   .header-btn {
     min-height: 38px;
     padding: 6px 9px;
+    gap: 6px;
+    font-size: 0.74rem;
   }
 
   .ecg-controls-header-btn {
-    min-width: 124px;
-    max-width: 138px;
-    font-size: 0.76rem;
+    min-width: 120px;
+    max-width: 128px;
   }
 
   .print-header-btn {
-    min-width: 88px;
-    max-width: 104px;
-    font-size: 0.70rem;
+    min-width: 82px;
+    max-width: 92px;
+    font-size: 0.68rem;
   }
 
-  .settings-mini-btn {
-    width: 46px;
-    min-width: 46px;
+  .btn-svg-icon {
+    width: 15px;
+    height: 15px;
   }
 
   .page-center {
     height: auto;
-    min-height: calc(100dvh - 74px);
+    min-height: calc(100dvh - 66px);
     overflow: visible;
   }
 
@@ -1348,7 +1383,6 @@ body.dark-mode .drawer-label-icon {
       "heart rhythm"
       "noise right"
       "signal signal";
-
     gap: 14px;
   }
 
@@ -1364,29 +1398,68 @@ body.dark-mode .drawer-label-icon {
 }
 
 @media (max-width: 650px) {
-  .page-center {
-    padding: 8px;
+  .app-header {
+    padding: 7px 8px;
   }
 
-  .brand-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
+  .app-header-inner {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    grid-template-areas: "settings brand actions";
+    gap: 6px;
+  }
+
+  .settings-mini-btn {
+    width: 40px;
+    min-width: 40px;
+    min-height: 36px;
   }
 
   .brand-logo {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
   }
 
   .brand-title {
-    white-space: normal;
-    text-align: center;
-    font-size: 1.35rem;
+    font-size: 0.98rem;
+    max-width: 170px;
   }
 
   .brand-subtitle {
-    font-size: 0.82rem;
+    display: none;
+  }
+
+  .header-left {
+    gap: 5px;
+  }
+
+  .ecg-controls-header-btn {
+    min-width: 42px;
+    max-width: 42px;
+    width: 42px;
+    padding: 0;
+  }
+
+  .ecg-controls-header-btn .btn-text {
+    display: none;
+  }
+
+  .print-header-btn {
+    min-width: 42px;
+    max-width: 42px;
+    width: 42px;
+    padding: 0;
+  }
+
+  .print-header-btn .btn-text {
+    display: none;
+  }
+
+  .print-header-btn .btn-svg-icon:last-child {
+    display: none;
+  }
+
+  .page-center {
+    padding: 8px;
   }
 
   .control-grid {
@@ -1427,50 +1500,6 @@ body.dark-mode .drawer-label-icon {
   .settings-modal,
   .drawer-panel {
     width: min(320px, 92vw);
-  }
-
-  .app-header-inner {
-    grid-template-columns: 46px 1fr auto;
-    grid-template-areas:
-      "settings brand actions";
-  }
-
-  .header-left {
-    gap: 6px;
-  }
-
-  .brand-row {
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .brand-logo {
-    width: 30px;
-    height: 30px;
-  }
-
-  .brand-title {
-    font-size: 1.05rem;
-    white-space: nowrap;
-  }
-
-  .brand-subtitle {
-    display: none;
-  }
-
-  .ecg-controls-header-btn {
-    min-width: 112px;
-    max-width: 120px;
-  }
-
-  .print-header-btn {
-    min-width: 78px;
-    max-width: 88px;
-  }
-
-  .btn-svg-icon {
-    width: 15px;
-    height: 15px;
   }
 }
 
