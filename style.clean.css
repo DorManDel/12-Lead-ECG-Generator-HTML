@@ -208,6 +208,19 @@ input[type="checkbox"] {
   text-align: center;
 }
 
+.manual-header-btn {
+  min-width: 92px;
+  max-width: 104px;
+  white-space: nowrap;
+  width: auto;
+  padding-inline: 10px;
+}
+
+.manual-header-btn.btn-svg-icon {
+  width: 16px;
+  height: 16px;
+}
+
 .btn-svg-icon {
   width: 17px;
   height: 17px;
@@ -1156,11 +1169,11 @@ canvas {
   width: 100%;
 
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr) auto;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
   grid-template-areas: "icon text value";
 
   align-items: center;
-  gap: 9px;
+  gap: 26px;
 
   direction: ltr;
   text-align: left;
@@ -1173,11 +1186,11 @@ canvas {
 .drawer-label-icon {
   grid-area: icon;
 
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
 
   display: block;
-  opacity: 0.9;
+  opacity: 0.82;
   object-fit: contain;
 }
 
@@ -1216,6 +1229,99 @@ body.dark-mode .drawer-label-icon {
 
 /* #endregion */
 
+/* #region 09 - Manual / Help Drawer */
+
+/*
+  Manual drawer reuses:
+  - .settings-overlay
+  - .settings-modal
+  - .settings-header
+  - .settings-body
+  - .settings-footer
+
+  This makes it open from the LEFT exactly like Page Settings.
+*/
+
+.manual-modal {
+  width: min(330px, 90vw);
+  direction: ltr;
+  text-align: left;
+}
+
+.manual-modal .settings-header {
+  direction: ltr;
+}
+
+.manual-modal .settings-header h2 {
+  text-align: center;
+}
+
+.manual-body {
+  gap: 14px;
+  direction: ltr;
+  text-align: left;
+}
+
+.manual-section {
+  display: grid;
+  gap: 10px;
+
+  padding: 14px;
+
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+
+  background: color-mix(in srgb, var(--card) 88%, #ffffff 4%);
+}
+
+.manual-section h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.manual-section p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 0.80rem;
+  font-weight: 380;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.manual-section strong {
+  color: var(--text);
+  font-weight: 580;
+}
+
+.manual-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  direction: ltr;
+}
+
+.manual-section-title img {
+  width: 18px;
+  height: 18px;
+
+  display: block;
+  flex: 0 0 auto;
+
+  opacity: 0.82;
+}
+
+body.dark-mode .manual-section-title img {
+  filter: invert(1);
+}
+
+/* #endregion */
 
 /* #region 10 - Footer */
 
@@ -1337,6 +1443,31 @@ body.dark-mode .drawer-label-icon {
     min-width: 44px;
   }
 
+  /* ------------------------------------------------------------
+   Manual Header Button
+
+   Goal:
+   - Compact button in desktop header
+   - Icon on the left
+   - Does not spread too wide
+------------------------------------------------------------ */
+
+  .manual-header-btn {
+    min-width: 78px;
+    max-width: 88px;
+    width: auto;
+    font-size: 0.70rem;
+
+    white-space: nowrap;
+  }
+
+  .manual-header-btn .btn-svg-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ---------- */
+
   .header-btn {
     min-height: 38px;
     padding: 6px 9px;
@@ -1412,6 +1543,17 @@ body.dark-mode .drawer-label-icon {
     width: 40px;
     min-width: 40px;
     min-height: 36px;
+  }
+
+  .manual-header-btn {
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    padding: 0;
+  }
+
+  .manual-header-btn .btn-text {
+    display: none;
   }
 
   .brand-logo {
@@ -1500,6 +1642,82 @@ body.dark-mode .drawer-label-icon {
   .settings-modal,
   .drawer-panel {
     width: min(320px, 92vw);
+  }
+}
+
+/* ------------------------------------------------------------
+   11.3 - Small phone header layout
+
+   Goal:
+   At very small widths, the brand/title gets its own row.
+   The buttons sit below it in one compact action row.
+
+   Visual:
+   Row 1: [ Logo + Title ]
+   Row 2: [ Settings ] [ ECG Controls ] [ Print ]
+------------------------------------------------------------ */
+
+@media (max-width: 550px) {
+  .app-header {
+    min-height: auto;
+    padding: 8px;
+  }
+
+  .app-header-inner {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "brand brand"
+      "settings actions";
+
+    justify-content: center;
+    align-items: center;
+
+    row-gap: 8px;
+    column-gap: 8px;
+  }
+
+  .brand-block {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .brand-row {
+    justify-content: center;
+  }
+
+  .brand-title {
+    max-width: 235px;
+    font-size: 1.05rem;
+  }
+
+  .header-right {
+    justify-content: flex-end;
+  }
+
+  .header-left {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .settings-mini-btn,
+  .ecg-controls-header-btn,
+  .manual-header-btn,
+  .print-header-btn {
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    height: 38px;
+    min-height: 38px;
+    padding: 0;
+  }
+
+  .ecg-controls-header-btn .btn-text,
+  .print-header-btn .btn-text {
+    display: none;
+  }
+
+  .print-header-btn .btn-svg-icon:last-child {
+    display: none;
   }
 }
 

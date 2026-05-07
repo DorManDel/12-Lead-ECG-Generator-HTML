@@ -75,6 +75,12 @@
           <span class="btn-text">ECG Controls</span>
         </button>
 
+        <!-- Manual button -->
+        <button id="manualBtn" type="button" class="header-btn manual-header-btn" title="How to use">
+          <img class="btn-svg-icon" src="assets/icons/manual.svg" alt="📖" aria-hidden="true" />
+        </button>
+
+        <!-- Print button is intentionally last, to be furthest right in RTL layout -->
         <button id="printBtn" type="button" class="header-btn print-header-btn">
           <img class="btn-svg-icon" src="assets/icons/print.svg" alt="" aria-hidden="true" />
           <span class="btn-text">Print / PDF</span>
@@ -368,6 +374,75 @@
           Done
         </button>
 
+      </footer>
+
+    </aside>
+  </div>
+
+  <!-- MANUAL / HELP DRAWER -->
+  <div id="manualOverlay" class="settings-overlay manual-overlay hidden">
+    <aside class="settings-modal manual-modal" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
+
+      <header class="settings-header">
+        <h2 id="manualTitle">Manual</h2>
+
+        <button id="closeManualBtn" class="icon-btn" type="button" aria-label="Close manual">
+          ✕
+        </button>
+      </header>
+
+      <div class="settings-body manual-body">
+
+        <section class="manual-section">
+          <h3 class="manual-section-title">
+            <img src="assets/icons/manual.svg" alt="" aria-hidden="true" />
+            Quick Start
+          </h3>
+          <p>
+            Choose a rhythm, set the heart rate, adjust signal height if needed,
+            then print or export the ECG as PDF.
+          </p>
+        </section>
+
+        <section class="manual-section">
+          <h3 class="manual-section-title">
+            <img src="assets/icons/ecg-controls.svg" alt="" aria-hidden="true" />
+            Top Controls
+          </h3>
+          <p><strong>Heart Rate:</strong> sets beats per minute.</p>
+          <p><strong>Recommended:</strong> restores the default HR for the selected rhythm.</p>
+          <p><strong>Rhythm:</strong> changes the ECG pattern.</p>
+          <p><strong>Noise:</strong> adds visual signal noise.</p>
+          <p><strong>Right ECG:</strong> adds R-prefix labels for right-sided ECG.</p>
+          <p><strong>Signal height:</strong> changes ECG amplitude.</p>
+        </section>
+
+        <section class="manual-section">
+          <h3 class="manual-section-title">
+            <img src="assets/icons/settings.svg" alt="" aria-hidden="true" />
+            Page Settings
+          </h3>
+          <p><strong>ECG page scale:</strong> changes the visible ECG page size.</p>
+          <p><strong>Grid opacity:</strong> controls ECG paper grid visibility.</p>
+          <p><strong>Dark mode:</strong> changes only the app theme.</p>
+        </section>
+
+        <section class="manual-section">
+          <h3 class="manual-section-title">
+            <img src="assets/icons/wave/qrs-width.svg" alt="" aria-hidden="true" />
+            ECG Controls
+          </h3>
+          <p>
+            Tune beat spacing, wave heights, and wave widths for visual testing.
+          </p>
+        </section>
+
+      </div>
+
+      <footer class="settings-footer">
+        <button id="closeManualFooterBtn" type="button">
+          Done
+        </button>
       </footer>
 
     </aside>

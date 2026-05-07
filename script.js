@@ -62,6 +62,11 @@ const controls = {
   closeEcgControlsBtn: document.getElementById("closeEcgControlsBtn"),
   closeEcgControlsFooterBtn: document.getElementById("closeEcgControlsFooterBtn"),
 
+  manualBtn: document.getElementById("manualBtn"),
+  manualOverlay: document.getElementById("manualOverlay"),
+  closeManualBtn: document.getElementById("closeManualBtn"),
+  closeManualFooterBtn: document.getElementById("closeManualFooterBtn"),
+
   drawerBeatSpacingSlider: document.getElementById("drawerBeatSpacingSlider"),
   drawerBeatSpacingValue: document.getElementById("drawerBeatSpacingValue"),
 
@@ -595,6 +600,22 @@ function drawCalibrationPulse(x, y) {
 }
 
 /**
+ * Safely attaches an event listener only if the element exists.
+ *
+ * This prevents the whole page from breaking if an ID is missing.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
+function safeAddEvent(element, eventName, handler) {
+  if (!element) {
+    return;
+  }
+
+  element.addEventListener(eventName, handler);
+}
+
+/**
  * Draws a small ownership watermark on the ECG print.
  *
  * Time Complexity: O(1)
@@ -846,6 +867,41 @@ function closeSettings() {
 }
 
 /**
+ * Opens the manual drawer.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
+function openManual() {
+  if (!controls.manualOverlay) {
+    return;
+  }
+
+  controls.manualOverlay.classList.remove("hidden");
+  controls.manualOverlay.classList.remove("is-closing");
+}
+
+/**
+ * Closes the manual drawer with the same left drawer animation
+ * used by Page Settings.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
+function closeManual() {
+  if (!controls.manualOverlay || controls.manualOverlay.classList.contains("hidden")) {
+    return;
+  }
+
+  controls.manualOverlay.classList.add("is-closing");
+
+  window.setTimeout(function () {
+    controls.manualOverlay.classList.add("hidden");
+    controls.manualOverlay.classList.remove("is-closing");
+  }, 160);
+}
+
+/**
  * Opens the ECG waveform controls drawer.
  *
  * Time Complexity: O(1)
@@ -856,6 +912,7 @@ function openEcgControls() {
   controls.ecgControlsOverlay.classList.remove("is-closing");
   updateDrawerLabels();
 }
+
 
 /**
  * Closes the ECG waveform controls drawer with an out animation.
@@ -872,7 +929,13 @@ function closeEcgControls() {
   }, 160);
 }
 
+/* EVENT LISTENERS :*/
 
+/* Print button event - triggers the browser's print dialog.
+ *
+ * Time Complexity: O(1)
+ * Space Complexity: O(1)
+ */
 controls.printBtn.addEventListener("click", function () {
   window.print();
 });
@@ -904,6 +967,18 @@ controls.settingsOverlay.addEventListener("click", function (event) {
   }
 });
 
+/* Manual drawer events */
+safeAddEvent(controls.manualBtn, "click", openManual);
+safeAddEvent(controls.closeManualBtn, "click", closeManual);
+safeAddEvent(controls.closeManualFooterBtn, "click", closeManual);
+
+safeAddEvent(controls.manualOverlay, "click", function (event) {
+  if (event.target === controls.manualOverlay) {
+    closeManual();
+  }
+});
+
+
 controls.recommendedHrBtn.addEventListener("click", function () {
   const selectedRhythm = controls.rhythm.value;
 
@@ -916,10 +991,12 @@ controls.recommendedHrBtn.addEventListener("click", function () {
   liveUpdateSettings();
 });
 
+
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     closeSettings();
     closeEcgControls();
+    closeManual();
   }
 });
 
