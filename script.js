@@ -827,6 +827,7 @@ function drawAllLeads(shouldReadUI = true) {
  */
 function openSettings() {
   controls.settingsOverlay.classList.remove("hidden");
+  controls.settingsOverlay.classList.remove("is-closing");
 }
 
 /**
@@ -836,7 +837,12 @@ function openSettings() {
  * Space Complexity: O(1)
  */
 function closeSettings() {
-  controls.settingsOverlay.classList.add("hidden");
+  controls.settingsOverlay.classList.add("is-closing");
+
+  window.setTimeout(function () {
+    controls.settingsOverlay.classList.add("hidden");
+    controls.settingsOverlay.classList.remove("is-closing");
+  }, 160);
 }
 
 /**

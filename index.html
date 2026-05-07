@@ -97,7 +97,7 @@
         <div class="control-area">
 
           <div class="control-grid">
-            <label class="field field-heart">
+            <div class="field field-heart">
 
               <!-- Top helper text -->
               <div class="field-helper-row">
@@ -109,18 +109,10 @@
 
               <!-- Input row -->
               <div class="hr-input-row">
-
                 <div class="recommended-wrapper">
                   <button id="recommendedHrBtn" type="button" class="mini-inline-btn">
                     Recommended
                   </button>
-
-                  <div class="tip-popup">
-                    <strong align="center">Heart Rate</strong>
-                    <span>Sets the simulated beats per minute.</span>
-                    <span>(🖱=🐁🎡) Use the mouse wheel while hovering over the HR input.</span>
-                    <span>The Recommended button restores the default HR for the selected rhythm.</span>
-                  </div>
                 </div>
 
                 <input id="heartRate" type="number" min="20" max="220" value="75" />
@@ -132,7 +124,7 @@
                 Recommended: 60–100
               </small>
 
-            </label>
+            </div>
 
             <label class="field field-wide field-rhythm">
 
@@ -286,7 +278,11 @@
           <h3>Timing</h3>
 
           <label class="drawer-slider">
-            <span>Beat spacing: <strong id="drawerBeatSpacingValue">75%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/beat-spacing.svg" alt="" aria-hidden="true" />
+              <span>Beat spacing:</span>
+              <strong id="drawerBeatSpacingValue">75%</strong>
+            </span>
             <input id="drawerBeatSpacingSlider" type="range" min="10" max="200" value="75" />
           </label>
         </section>
@@ -295,27 +291,47 @@
           <h3>Wave Heights</h3>
 
           <label class="drawer-slider">
-            <span>P height: <strong id="drawerPHeightValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/p-wave.svg" alt="" aria-hidden="true" />
+              <span>P height:</span>
+              <strong id="drawerPHeightValue">100%</strong>
+            </span>
             <input id="drawerPHeightSlider" type="range" min="0" max="350" value="100" />
           </label>
 
           <label class="drawer-slider">
-            <span>Q depth: <strong id="drawerQDepthValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/q-depth.svg" alt="" aria-hidden="true" />
+              <span>Q depth:</span>
+              <strong id="drawerQDepthValue">100%</strong>
+            </span>
             <input id="drawerQDepthSlider" type="range" min="0" max="350" value="100" />
           </label>
 
           <label class="drawer-slider">
-            <span>R height: <strong id="drawerRHeightValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/r-height.svg" alt="" aria-hidden="true" />
+              <span>R height:</span>
+              <strong id="drawerRHeightValue">100%</strong>
+            </span>
             <input id="drawerRHeightSlider" type="range" min="0" max="400" value="100" />
           </label>
 
           <label class="drawer-slider">
-            <span>S depth: <strong id="drawerSDepthValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/s-depth.svg" alt="" aria-hidden="true" />
+              <span>S depth:</span>
+              <strong id="drawerSDepthValue">100%</strong>
+            </span>
             <input id="drawerSDepthSlider" type="range" min="0" max="350" value="100" />
           </label>
 
           <label class="drawer-slider">
-            <span>T height: <strong id="drawerTHeightValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/t-wave.svg" alt="" aria-hidden="true" />
+              <span>T height:</span>
+              <strong id="drawerTHeightValue">100%</strong>
+            </span>
             <input id="drawerTHeightSlider" type="range" min="-250" max="400" value="100" />
           </label>
         </section>
@@ -324,18 +340,25 @@
           <h3>Wave Widths</h3>
 
           <label class="drawer-slider">
-            <span>QRS width: <strong id="drawerQrsWidthValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/qrs-width.svg" alt="" aria-hidden="true" />
+              <span>QRS width:</span>
+              <strong id="drawerQrsWidthValue">100%</strong>
+            </span>
             <input id="drawerQrsWidthSlider" type="range" min="25" max="450" value="100" />
           </label>
 
           <label class="drawer-slider">
-            <span>T width: <strong id="drawerTWidthValue">100%</strong></span>
+            <span class="drawer-label">
+              <img class="drawer-label-icon" src="assets/icons/wave/t-width.svg" alt="" aria-hidden="true" />
+              <span>T width:</span>
+              <strong id="drawerTWidthValue">100%</strong>
+            </span>
             <input id="drawerTWidthSlider" type="range" min="25" max="350" value="100" />
           </label>
         </section>
 
       </div>
-
       <footer class="drawer-footer">
         <button id="drawerResetWaveformBtn" type="button" class="secondary-btn">
           Reset ECG Sliders
